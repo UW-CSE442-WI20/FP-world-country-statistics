@@ -1,0 +1,7 @@
+path {
+  opacity: 0.8;
+}
+
+path:hover {
+  opacity: 1;
+}
