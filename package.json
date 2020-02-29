@@ -25,10 +25,11 @@
     "merge-stream": "2.0.0"
   },
   "dependencies": {
-    "d3": "^5.15.0",
     "@fortawesome/fontawesome-free": "5.10.2",
     "bootstrap": "4.3.1",
+    "bootstrap-select": "^1.13.12",
     "chart.js": "2.8.0",
+    "d3": "^5.15.0",
     "datatables.net-bs4": "1.10.19",
     "jquery": "3.4.1",
     "jquery.easing": "^1.4.1"

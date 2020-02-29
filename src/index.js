@@ -31,11 +31,20 @@ function setTabs(){
     });
 }
 
+function setSelectPickers(){
+    $('#country-picker').selectpicker();
+    $('#data-picker').selectpicker();
+    $('#year-picker').selectpicker();
+}
+
 
 
 function init() {
     renderMap();
     setTabs();
+    // setSelectPickers();
+   
+    
 }
 
 init();
