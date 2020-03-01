@@ -1,37 +1,35 @@
-var width = 960,
-    height = 500;
+const topo = require("./geoworld.json");
+const d3 = require("d3");
+console.log(topo);
 
-var projection = d3.geo.orthographic()
-    .scale(250)
-    .translate([width / 2, height / 2])
-    .clipAngle(90);
+var land = topojson.feature(topo, topo.objects.land)
+var countries = topojson.feature(topo, topo.objects.countries)
 
-var path = d3.geo.path()
-    .projection(projection);
+var current = d3.select('#map3d-header')
+var canvas = document.getElementById('globe')
 
-var λ = d3.scale.linear()
-    .domain([0, width])
-    .range([-180, 180]);
+function draw() {
+  var curHeight = window.innerHeight - 100;
+  var curWidth = curHeight;
 
-var φ = d3.scale.linear()
-    .domain([0, height])
-    .range([90, -90]);
+  var radius = curWidth / 2;
 
-var svg = d3.select("#3d-world").append("svg")
-    .attr("width", width)
-    .attr("height", height);
+  var ctx = canvas.getContext('2d')
+  ctx.canvas.width = curWidth;
+  ctx.canvas.height = curHeight;
 
-svg.on("mousemove", function() {
-  var p = d3.mouse(this);
-  projection.rotate([λ(p[0]), φ(p[1])]);
-  svg.selectAll("path").attr("d", path);
-});
+  var projection = d3.geoOrthographic().scale(radius).translate([curWidth / 2, curHeight / 2]);
+  var path = d3.geoPath(projection, ctx);
+  console.log(path);
 
-d3.json("./geoworld.json", function(error, world) {
-  if (error) throw error;
+  ctx.linewidth = 1.5;
+  ctx.fillStyle = "rgba(176, 246, 245, 0.5)";
+  ctx.beginPath(), ctx.arc(radius, radius, radius, 0, 2 * Math.PI), ctx.fill(), ctx.stroke();
 
-  svg.append("path")
-      .datum(topojson.feature(topo, topo.objects.countries))
-      .attr("class", "land")
-      .attr("d", path);
-});
+  ctx.lineWidth = 0.35;
+  ctx.fillStyle = "black";
+  console.log(countries);
+  ctx.beginPath(), path(countries), ctx.fill(), ctx.stroke();
+}
+
+draw();
