@@ -13,14 +13,27 @@ function setTabs(){
         document.getElementById("world").classList.remove("active");
         document.getElementById("tables").classList.remove("show");
         document.getElementById("tables").classList.remove("active");
+        document.getElementById("3d-world").classList.remove("active");
+        document.getElementById("3d-world").classList.remove("show");
+
     });
-    
+    document.getElementById("3d-world-tab").addEventListener("click", function (){
+        document.getElementById("3d-world").className += " active show";
+        document.getElementById("graphs").classList.remove("show");
+        document.getElementById("graphs").classList.remove("active");
+        document.getElementById("tables").classList.remove("show");
+        document.getElementById("tables").classList.remove("active");
+        document.getElementById("world").classList.remove("show");
+        document.getElementById("world").classList.remove("active");
+    });
     document.getElementById("world-tab").addEventListener("click", function (){
         document.getElementById("world").className += " active show";
         document.getElementById("graphs").classList.remove("show");
         document.getElementById("tables").classList.remove("show");
         document.getElementById("graphs").classList.remove("active");
         document.getElementById("tables").classList.remove("active");
+        document.getElementById("3d-world").classList.remove("active");
+        document.getElementById("3d-world").classList.remove("show");
     });
     document.getElementById("table-tab").addEventListener("click", function (){
         document.getElementById("tables").className += " active show";
@@ -28,6 +41,8 @@ function setTabs(){
         document.getElementById("graphs").classList.remove("show");
         document.getElementById("world").classList.remove("active");
         document.getElementById("graphs").classList.remove("active");
+        document.getElementById("3d-world").classList.remove("active");
+        document.getElementById("3d-world").classList.remove("show");
     });
 }
 
@@ -43,8 +58,8 @@ function init() {
     renderMap();
     setTabs();
     // setSelectPickers();
-   
-    
+
+
 }
 
 init();
