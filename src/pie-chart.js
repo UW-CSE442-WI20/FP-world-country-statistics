@@ -1,19 +1,13 @@
 const d3 = require("d3");
 
 async function makeDonut(final_data) {
-    let colors = ['#4e73df', '#f6c23e', '#36b9cc', '#1cc88a', '#6f42c1', '#5a5c69'];
-    let data = [
-        { color: '#4e73df', name: 'Electricity', value: "12"},
-        { color: '#f6c23e', name: 'Solar', value: 123.4},
-        { color: '#36b9cc', name: 'Gas', value: 312 },
-        { color: '#1cc88a', name: 'Kerosene', value: 123.2}
-    ];
-
+    let data = final_data;
+    document.getElementById('pie').innerHTML = "";
     let text = '';
 
-    let width = 160;
-    let height = 160;
-    let thickness = 20;
+    let width = 300;
+    let height = 300;
+    let thickness = 30;
     let duration = 200;
 
     let radius = Math.min(width, height) / 2;

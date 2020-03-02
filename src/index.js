@@ -73,7 +73,7 @@ async function parseData() {
         }
         let indicatorObject = {};
         for(let i = 1990; i <= 2015; i++){
-            indicatorObject[i] = row["" + i];
+            indicatorObject["" + i] = row["" + i];
         }
         countryObject[indicator] = indicatorObject;
         countryToData[country] = countryObject;
@@ -99,12 +99,47 @@ async function fillFilters(){
 
 }
 
+async function generateCharts(){
+    let pieChartColors = ['#4e73df', '#f6c23e', '#36b9cc', '#1cc88a', '#6f42c1', '#5a5c69'];
+    let countryFilter = $("#country-picker").val();
+    let dataFilter = $("#data-picker").val();
+    let yearFilter = $("#year-picker").val();
+    let donutData = [];
+    
+    for(let i = 0; i < countryFilter.length; i++){
+        donutData.push({color: pieChartColors[i], name: countryFilter[i], value: countryToData[countryFilter[i]][dataFilter][yearFilter]});
+    }
+    makeDonut(donutData);
+}
+
+async function enableGenerateButton(){
+    let countryFilter = $("#country-picker").val();
+    let dataFilter = $("#data-picker").val();
+    let yearFilter = $("#year-picker").val();
+
+    if(countryFilter.length === 0 || dataFilter === "" || yearFilter === ""){
+        document.getElementById("generate_button").classList.remove("active");
+        document.getElementById("generate_button").className += " disabled";
+        document.getElementById("generate_button").disabled = true;
+    }else{
+        document.getElementById("generate_button").classList.remove("disabled");
+        document.getElementById("generate_button").className += " active";
+        document.getElementById("generate_button").disabled = false;
+    }
+
+
+    
+}
+
 async function init() {
+    document.getElementById("generate_button").addEventListener("click", generateCharts);
+    document.getElementById("country-picker").addEventListener("change", enableGenerateButton);
+    document.getElementById("data-picker").addEventListener("change", enableGenerateButton);
+    document.getElementById("year-picker").addEventListener("change", enableGenerateButton);
     renderMap();
     setTabs();
     await parseData();
     await fillFilters();
-    await makeDonut(null);
 }
 
 init();
