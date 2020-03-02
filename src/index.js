@@ -1,4 +1,5 @@
 import Map from "./map.js";
+import makeDonut from "./pie-chart.js";
 const d3 = require("d3");
 const regeneratorRuntime = require("regenerator-runtime");
 
@@ -76,19 +77,34 @@ async function parseData() {
         }
         countryObject[indicator] = indicatorObject;
         countryToData[country] = countryObject;
-    });
-    await console.log(countryNames);
-    await console.log(indicators);
-    await console.log(countryToData);
+    })
+
 }
 
+async function fillFilters(){
+    let countryFilter = document.getElementById("country-picker");
+    let dataFilter = document.getElementById("data-picker");
+    let yearFilter = document.getElementById("year-picker");
 
+    countryNames.forEach((value) => {
+        countryFilter.innerHTML += "<option value='" + value + "'>" + value + "</option>";
+    });
+    indicators.forEach((value) => {
+        dataFilter.innerHTML += "<option value='" + value + "'>" + value + "</option>";
+    });
+    for(let i = 1990; i <= 2015; i++){
+        yearFilter.innerHTML += "<option value='" + i + "'>" + i + "</option>";
+    }
+    
+
+}
 
 async function init() {
     renderMap();
     setTabs();
     await parseData();
-    
+    await fillFilters();
+    await makeDonut(null);
 }
 
 init();

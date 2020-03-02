@@ -173,49 +173,52 @@
                         <h6 class="m-0 font-weight-bold text-primary">Some Charts</h6>
                       </div>
                       <div class="card-body">
+                        <div id="pie">
 
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  <div class="col-md-3">
+                  <div class="col-lg-3">
                     <div class="card shadow mb-4">
                       <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Data</h6>
                       </div>
                       <div class="card-body">
                         <h2 class="h4 mb-0 text-gray-800">By Country:</h2>
-                          <select class="selectpicker show-tick" title="Choose Countries..." multiple data-actions-box="true" data-width="auto" data-live-search="true" id="country-picker">
-                            <optgroup label="Asia">
+                          <select class="selectpicker show-tick" title="Choose Countries..." multiple data-max-options="6" data-width="100%" data-live-search="true" id="country-picker">
+                            <!-- <optgroup label="Asia">
                               <option value="1">China</option>
                               <option value="2">South Korea</option>
                             </optgroup>
                             <optgroup label="North America">
                               <option value="1">USA</option>
                               <option value="2">Canada</option>
-                            </optgroup>
+                            </optgroup> -->
 
                           </select>
                           <hr class="sidebar-divider">
                           <h2 class="h4 mb-0 text-gray-800">By Data Type:</h2>
-                          <select class="selectpicker show-tick" data-width="auto" title="Choose a Data type..." data-live-search="true" id="data-picker">
-                            <optgroup label="Economy">
+                          <select class="selectpicker show-tick" data-width="100%" title="Choose a Data type..." data-live-search="true" id="data-picker">
+                            <!-- <optgroup label="Economy">
                               <option value="1">GDP</option>
                             </optgroup>
                             <optgroup label="Social">
                               <option value="1">Poverty</option>
                               <option value="2">Life Expentency</option>
-                            </optgroup>
+                            </optgroup> -->
                           </select>
                           <hr class="sidebar-divider">
                           <h2 class="h4 mb-0 text-gray-800">By Year:</h2>
-                          <select class="selectpicker show-tick" data-width="auto" title="Choose a Year..." data-live-search="true" id="year-picker">
-                            <option value="1">2010</option>
+                          <select class="selectpicker show-tick" data-width="100%" title="Choose a Year..." data-live-search="true" id="year-picker">
+                            <!-- <option value="1">2010</option>
                             <option value="2">2011</option>
                             <option value="3">2012</option>
-                            <option value="4">2013</option>
+                            <option value="4">2013</option> -->
                           </select>
-
+                          <hr class="sidebar-divider">
+                          <button id="generate_button" type="button" class="btn btn-primary">Generate</button>
                       </div>
                     </div>
                   </div>
@@ -266,6 +269,7 @@
   <!-- End of Page Wrapper -->
 
   <!-- Page level custom scripts -->
+  <script src="./pie-chart.js"></script>
   <script src="./index.js"></script>
   <script src="./map.js"></script>
   <script src="./3dmap.js"></script>
