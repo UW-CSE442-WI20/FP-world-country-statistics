@@ -1,5 +1,12 @@
 import Map from "./map.js";
+const d3 = require("d3");
+const regeneratorRuntime = require("regenerator-runtime");
 
+var indicators = new Set();
+var countryNames = new Set();
+var countryToData = {};
+
+var data = require("./data.csv");
 function renderMap(){
     var map = new Map();
     map.render("United States of America", "navy");
@@ -52,14 +59,36 @@ function setSelectPickers(){
     $('#year-picker').selectpicker();
 }
 
+async function parseData() {
+    await d3.csv(data, async function(row) {
+        
+        let country = row["Country Name"];
+        let indicator = row["Indicator Name"];
+        countryNames.add(country);
+        indicators.add(indicator);
+        let countryObject = {};
+        if (countryToData[country] !== undefined) {
+            countryObject = countryToData[country];
+        }
+        let indicatorObject = {};
+        for(let i = 1990; i <= 2015; i++){
+            indicatorObject[i] = row["" + i];
+        }
+        countryObject[indicator] = indicatorObject;
+        countryToData[country] = countryObject;
+    });
+    await console.log(countryNames);
+    await console.log(indicators);
+    await console.log(countryToData);
+}
 
 
-function init() {
+
+async function init() {
     renderMap();
     setTabs();
-    // setSelectPickers();
-
-
+    await parseData();
+    
 }
 
 init();

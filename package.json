@@ -32,6 +32,7 @@
     "d3": "^5.15.0",
     "datatables.net-bs4": "1.10.19",
     "jquery": "3.4.1",
-    "jquery.easing": "^1.4.1"
+    "jquery.easing": "^1.4.1",
+    "regenerator-runtime": "^0.13.3"
   }
 }
