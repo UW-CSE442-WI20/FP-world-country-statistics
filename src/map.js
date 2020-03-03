@@ -3,6 +3,7 @@ const d3 = require("d3");
 const cc = require("./countrycodes.js");
 var active = d3.select(null);
 var width, height, zoom, path, svg, g, data;
+clearData();
 
 function map(d){
   data = d;
@@ -61,6 +62,10 @@ function focus(node){
   
   displayData(node.properties.name);
 }
+
+function clearData() {
+  d3.select("#map-data").style("padding-top", "1.25rem").html("<h4>Select a country to get individual stats.</h4");
+}
   
 function reset() {
   active.classed("active", false);
@@ -69,7 +74,9 @@ function reset() {
   svg.transition()
       .duration(750)
       .call(zoom.transform, d3.zoomIdentity);
+  clearData();
 }
+
 function zoomed() {
   g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
   g.attr("transform", d3.event.transform);
@@ -77,13 +84,11 @@ function zoomed() {
 
 function displayData(country) {
   let stats = data[country];
-  console.log(cc.cc);
-  let html = "<div class='map-data-header'><div><h1>" + country + "</h1></div><img src='https://www.countryflags.io/" + cc.codes[country] + "/flat/64.png'></div>";
-  console.log(stats);
+  let html = "<div class='map-data-header'><h3 style='margin-top:16px'>" + country + "</h3><img src='https://www.countryflags.io/" + cc.codes[country] + "/flat/64.png' padding=0px></div>";
   Object.keys(stats).forEach(key => {
     html += key + " : " + stats[key][2015] + "<br/>";
   });
-  d3.select("#map-data").html(html);
+  d3.select("#map-data").style("padding-top", "0px").html(html);
   }
 
 function stopped() {

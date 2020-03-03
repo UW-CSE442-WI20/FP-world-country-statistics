@@ -21,10 +21,13 @@ path:hover {
   fill: steelblue;
 }
 
-.map-data-header {
+.map-header, .map-data-header, .map-view-select {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+}
+
+.map-header, .map-data-header {
+  justify-content: space-between;
 }
 
 

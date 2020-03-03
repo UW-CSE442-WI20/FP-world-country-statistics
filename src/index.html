@@ -108,7 +108,15 @@
                   <div class="col-xl-9" >
                     <div class="card shadow mb-4" >
                       <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">World Map</h6>
+                        <div class="map-header">
+                          <h6 class="m-0 font-weight-bold text-primary">World Map</h6>
+                          <div class="map-view-select">
+                            <i class="fas fa-fw fa-eye" style="margin-right:10px;", aria-hidden="true"></i>
+                            <span></span>
+                            <button>2D</button>
+                            <button>3D</button>
+                          </div>
+                        </div>
                       </div>
                       <div class="card-body">
                         <div id="map">
@@ -123,7 +131,6 @@
                         <h6 class="m-0 font-weight-bold text-primary">Most Recent Data</h6>
                       </div>
                       <div id="map-data" class="card-body">
-                        Select a country to get more information.
                       </div>
                     </div>
                   </div>
