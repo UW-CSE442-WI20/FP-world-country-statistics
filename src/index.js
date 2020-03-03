@@ -182,11 +182,11 @@ async function enableGenerateButton(){
 }
 
 async function initCharts(){
-    $("#country-picker").val("World");
+    $("#country-picker").val(["Argentina", "Chile", "Hong Kong SAR, China"]);
     $("#data-picker").val("Population, total");
     $("#year-picker").val("2000");
     $('.selectpicker').selectpicker('refresh');
-    // generateCharts();
+    generateCharts();
 }
 
 async function init() {
