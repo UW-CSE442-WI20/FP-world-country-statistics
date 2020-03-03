@@ -1,5 +1,3 @@
-const d3 = require("d3");
-
 async function makeDonut(final_data) {
     document.getElementById("pie-container").innerHTML = "<canvas id='pie'></canvas>";
     var ctx = document.getElementById("pie");
