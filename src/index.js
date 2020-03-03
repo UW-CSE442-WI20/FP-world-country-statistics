@@ -92,8 +92,6 @@ async function fillFilters(){
     for(let i = 1990; i <= 2015; i++){
         yearFilter.innerHTML += "<option value='" + i + "'>" + i + "</option>";
     }
-    
-
 }
 
 async function generateCharts(){
@@ -124,18 +122,27 @@ async function generateCharts(){
         lineDataSet.push({label: countryFilter[i], backgroundColor:secondaryChartColors[i] ,borderColor: pieChartColors[i], data: lineTemp, lineTension: 0.3, pointRadius: 3,
             pointBorderWidth: 2});
 
-        radarDataSet.push({label: barLabel[i], backgroundColor:secondaryChartColors[i] ,
-            borderColor: pieChartColors[i], data: lineTemp,
-            fill: true});
+        
     }
 
+    for(let i = 0; i < barLabel.length; i++){
+        let year = barLabel[i];
+        let tempRadar = {label: year, backgroundColor:secondaryChartColors[i] ,
+            borderColor: pieChartColors[i],
+            fill: true};
+        let data =[];
+        for(let j = 0; j < lineDataSet.length; j++){
+            data.push(lineDataSet[j].data[i]);
+        }
+        tempRadar.data = data;
+        radarDataSet.push(tempRadar);
+    }
     barData.datasets = barDataSet;
     lineData.datasets = lineDataSet;
     radarData.datasets = radarDataSet;
     makeDonut(donutData);
     makeBarChart(barData);
     makeLineChart(lineData);
-
     makeRadarChart(radarData);
 
 }
@@ -172,9 +179,14 @@ async function enableGenerateButton(){
         document.getElementById("generate_button").className += " active";
         document.getElementById("generate_button").disabled = false;
     }
+}
 
-
-    
+async function initCharts(){
+    $("#country-picker").val("World");
+    $("#data-picker").val("Population, total");
+    $("#year-picker").val("2000");
+    $('.selectpicker').selectpicker('refresh');
+    // generateCharts();
 }
 
 async function init() {
@@ -186,6 +198,7 @@ async function init() {
     setTabs();
     await parseData();
     await fillFilters();
+    await initCharts();
 }
 
 init();
