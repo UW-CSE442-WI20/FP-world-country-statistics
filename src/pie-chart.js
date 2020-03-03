@@ -1,10 +1,13 @@
 const d3 = require("d3");
 
 async function makeDonut(final_data) {
+    document.getElementById("pie-container").innerHTML = "<canvas id='pie'></canvas>";
     var ctx = document.getElementById("pie");
     let label_data = final_data.map(x => x.name);
     let value_data = final_data.map(x => x.value);
     let color_data = final_data.map(x => x.color);
+
+    
 var myPieChart = new Chart(ctx, {
   type: 'doughnut',
   data: {

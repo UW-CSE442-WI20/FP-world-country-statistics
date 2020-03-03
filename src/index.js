@@ -1,5 +1,7 @@
 import Map from "./map.js";
 import makeDonut from "./pie-chart.js";
+import makeLineChart from "./line-chart.js";
+import makeBarChart from "./bar-chart.js";
 const d3 = require("d3");
 const regeneratorRuntime = require("regenerator-runtime");
 
@@ -54,12 +56,6 @@ function setTabs(){
     });
 }
 
-function setSelectPickers(){
-    $('#country-picker').selectpicker();
-    $('#data-picker').selectpicker();
-    $('#year-picker').selectpicker();
-}
-
 async function parseData() {
     await d3.csv(data, async function(row) {
         
@@ -101,15 +97,55 @@ async function fillFilters(){
 
 async function generateCharts(){
     let pieChartColors = ['#4e73df', '#f6c23e', '#36b9cc', '#1cc88a', '#6f42c1', '#5a5c69'];
+    let secondaryChartColors = ['rgba(78, 115, 223, 0.2)', 'rgba(246, 194, 62, 0.2)', 'rgba(54, 185, 204, 0.2)', 'rgba(28, 200, 138, 0.2)', 'rgba(111, 66, 193, 0.2)', 'rgba(90, 92, 105, 0.2)'];
     let countryFilter = $("#country-picker").val();
     let dataFilter = $("#data-picker").val();
     let yearFilter = $("#year-picker").val();
     let donutData = [];
-    
+
+    let barData = {};
+    let barLabel = getRangeYears(parseInt(yearFilter));
+    barData.labels = barLabel;
+    let barDataSet = [];
+    let lineDataSet = [];
+    let  lineData = {};
+    lineData.labels = barLabel;
     for(let i = 0; i < countryFilter.length; i++){
         donutData.push({color: pieChartColors[i], name: countryFilter[i], value: countryToData[countryFilter[i]][dataFilter][yearFilter]});
+        let barTemp = getCountryData(countryFilter[i], dataFilter, barLabel);
+        
+        barDataSet.push({label: countryFilter[i], backgroundColor: pieChartColors[i], data: barTemp});
+
+        let lineTemp = getCountryData(countryFilter[i], dataFilter, barLabel);
+        lineDataSet.push({label: countryFilter[i], backgroundColor:secondaryChartColors[i] ,borderColor: pieChartColors[i], data: barTemp, lineTension: 0.3, pointRadius: 3,
+            pointBorderWidth: 2});
+
     }
+
+    barData.datasets = barDataSet;
+    lineData.datasets = lineDataSet;
     makeDonut(donutData);
+    makeBarChart(barData);
+    makeLineChart(lineData);
+
+}
+
+function getRangeYears(year){
+    if(year <= 1995){
+        return [1990, 1991, 1992, 1993, 1994, 1995];
+    }else if(year >= 2010){
+        return [2010, 2011, 2012, 2013, 2014, 2015];
+    }else{
+        return [year, year + 1, year + 2, year + 3, year  + 4, year + 5];
+    }
+}
+
+function getCountryData(country, dataType, years){
+    let ret = [];
+    for(let i = 0 ; i < years.length; i++){
+        ret.push(countryToData[country][dataType][years[i]]);
+    }
+    return ret;
 }
 
 async function enableGenerateButton(){
