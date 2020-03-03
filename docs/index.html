@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>World Statistics</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="https://uw-cse442-wi20.github.io/FP-world-country-statistics/all.min.5ba5f7cb.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+
+  <!-- Custom styles for this template-->
+  <link href="https://uw-cse442-wi20.github.io/FP-world-country-statistics/sb-admin-2.min.d486dcb4.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://uw-cse442-wi20.github.io/FP-world-country-statistics/styles.93b7acb0.css">
+  <script src="https://d3js.org/topojson.v3.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
+  <!-- D3 orthographic maps and geomap -->
+  <script src="https://d3js.org/topojson.v2.min.js"></script>
+  <script src="https://d3js.org/d3-geo.v1.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
+
+</head>
+
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="https://uw-cse442-wi20.github.io/FP-world-country-statistics/index.html">
+        <div class="sidebar-brand-icon">
+          <i class="fas fa-home"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">World Statistics</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item active">
+        <a class="nav-link" href="https://uw-cse442-wi20.github.io/FP-world-country-statistics/index.html">
+          <i class="fas fa-fw fa-search"></i>
+          <span>Dashboard</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <li class="nav-item">
+        <a class="nav-link" id="world-tab" data-toggle="tab" href="#world" role="tab" aria-controls="contact" aria-selected="true">
+          <i class="fas fa-fw fa-globe" aria-hidden="true"></i><span>World View</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="3d-world-tab" data-toggle="tab" href="#3dworld" role="tab" aria-controls="contact" aria-selected="false">
+          <i class="fas fa-fw fa-globe" aria-hidden="true"></i><span>3D World View</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="chart-tab" data-toggle="tab" href="#graphs" role="tab" aria-controls="contact" aria-selected="false">
+          <i class="fas fa-fw fa-chart-area">
+          </i><span>Charts</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="table-tab" data-toggle="tab" href="#tables" role="tab" aria-controls="contact" aria-selected="false">
+          <i class="fas fa-fw fa-table">
+          </i><span>Tables</span></a>
+      </li>
+
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+
+        <div class="container-fluid" style="padding-top: 50px;">
+
+
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="world" role="tabpanel" aria-labelledby="home-tab">
+              <h1 class="h3 mb-0 text-gray-800">World View</h1>
+                <div class="row">
+                  <div class="col-xl-9">
+                    <div class="card shadow mb-4">
+                      <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">World Map</h6>
+                      </div>
+                      <div class="card-body">
+                        <div id="map">
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3">
+                    <div class="card shadow mb-4">
+                      <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Results</h6>
+                      </div>
+                      <div class="card-body">
+                        <h2 class="h4 mb-0 text-gray-800">Country Name: China</h2>
+                        <h2 class="h4 mb-0 text-gray-800">GDP: 1B</h2>
+                        <h2 class="h4 mb-0 text-gray-800">Debt: 1B</h2>
+                        <h2 class="h4 mb-0 text-gray-800">Something: 123</h2>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="graphs" role="tabpanel" aria-labelledby="profile-tab">
+                <h1 class="h3 mb-0 text-gray-800">Graphs</h1>
+                <div class="row">
+                  <div class="col-lg-3">
+                    <div class="card shadow mb-4">
+                      <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Pie Chart</h6>
+                      </div>
+                      <div class="card-body" id="pie-container" style="height: 400px;">
+                        <canvas id="pie">
+
+                        </canvas>
+                        
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="card shadow mb-4">
+                      <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Bar Chart</h6>
+                      </div>
+                      <div class="card-body" style="height: 400px;" id="bar-container">
+                        <canvas id="bar">
+
+                        </canvas>
+                        
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3">
+                    <div class="card shadow mb-4">
+                      <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Data</h6>
+                      </div>
+                      <div class="card-body" style="height: 400px;">
+                        <h2 class="h4 mb-0 text-gray-800">By Country:</h2>
+                          <select class="selectpicker show-tick" title="Choose Countries..." multiple="" data-max-options="6" data-width="100%" data-live-search="true" id="country-picker">
+                            <!-- <optgroup label="Asia">
+                              <option value="1">China</option>
+                              <option value="2">South Korea</option>
+                            </optgroup>
+                            <optgroup label="North America">
+                              <option value="1">USA</option>
+                              <option value="2">Canada</option>
+                            </optgroup> -->
+
+                          </select>
+                          <hr class="sidebar-divider">
+                          <h2 class="h4 mb-0 text-gray-800">By Data Type:</h2>
+                          <select class="selectpicker show-tick" data-width="100%" title="Choose a Data type..." data-live-search="true" id="data-picker">
+                            <!-- <optgroup label="Economy">
+                              <option value="1">GDP</option>
+                            </optgroup>
+                            <optgroup label="Social">
+                              <option value="1">Poverty</option>
+                              <option value="2">Life Expentency</option>
+                            </optgroup> -->
+                          </select>
+                          <hr class="sidebar-divider">
+                          <h2 class="h4 mb-0 text-gray-800">By Year:</h2>
+                          <select class="selectpicker show-tick" data-width="100%" title="Choose a Year..." data-live-search="true" id="year-picker">
+                            <!-- <option value="1">2010</option>
+                            <option value="2">2011</option>
+                            <option value="3">2012</option>
+                            <option value="4">2013</option> -->
+                          </select>
+                          <hr class="sidebar-divider">
+                          <button id="generate_button" disabled="" type="button" class="btn btn-primary disabled">Generate</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-8">
+                    <div class="card shadow mb-4">
+                      <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Line Graph</h6>
+                      </div>
+                      <div class="card-body" style="height: 400px" id="line-container">
+                        <canvas id="line">
+
+                        </canvas>
+                        
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="card shadow mb-4">
+                      <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Radar Chart</h6>
+                      </div>
+                      <div class="card-body" style="height: 400px" id="radar-container">
+                        <canvas id="radar">
+
+                        </canvas>
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="tab-pane fade" id="tables" role="tabpanel" aria-labelledby="contact-tab">
+
+
+              </div>
+
+              <!-- 3D world Map Session -->
+              <div class="tab-pane fade" id="3d-world" role="tabpanel" aria-labelledby="contact-tab">
+                <div class="row">
+                  <div class="col-xl-9">
+                    <div class="card shadow mb-4">
+                      <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">World Map</h6>
+                      </div>
+                      <div class="card-body text-center">
+                        <span id="map3d-header"></span>
+                        <canvas id="globe"></canvas>
+                        <div>
+                          <input type="range" min="0" max="360" value="0" id="mapRange">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3">
+                    <div class="card shadow mb-4">
+                      <div id="menu">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+      </div>
+      <!-- End of Main Content -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  
+  <!-- End of Page Wrapper -->
+
+  <!-- Page level custom scripts -->
+  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/pie-chart.a4ca2097.js"></script>
+  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/src.d04e198c.js"></script>
+  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/map.d2eff550.js"></script>
+  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/3dmap.bca2db5d.js"></script>
+</body>
+
+</html>
