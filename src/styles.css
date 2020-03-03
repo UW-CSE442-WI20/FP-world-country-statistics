@@ -6,6 +6,27 @@ path:hover {
   opacity: 1;
 }
 
+.background {
+  fill: none;
+  pointer-events: all;
+}
+
+.feature {
+  fill: lightgray;
+  stroke: darkgray;
+  cursor: pointer;
+}
+
+.feature.active {
+  fill: steelblue;
+}
+
+.map-data-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 
 /* 3d map ------------------------*/
 #globe {
