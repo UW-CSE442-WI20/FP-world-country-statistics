@@ -72,7 +72,6 @@ var myBarChart = new Chart(ctx, {
     },
     legend: {
       display: true,
-      position: "bottom"
     },
     tooltips: {
       titleMarginBottom: 10,
