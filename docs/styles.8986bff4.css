@@ -1,0 +1,25 @@
+path {
+  opacity: 0.8;
+}
+
+path:hover {
+  opacity: 1;
+}
+
+
+/* 3d map ------------------------*/
+#globe {
+  cursor: move;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#map3d-header{
+  position: absolute;
+  color: black;
+}
+
+/* -------- */
+
+
+/*# sourceMappingURL=/styles.8986bff4.css.map */

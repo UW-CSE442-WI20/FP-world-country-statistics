@@ -18,7 +18,7 @@
 
   <!-- Custom styles for this template-->
   <link href="https://uw-cse442-wi20.github.io/FP-world-country-statistics/sb-admin-2.min.d486dcb4.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://uw-cse442-wi20.github.io/FP-world-country-statistics/styles.93b7acb0.css">
+  <link rel="stylesheet" href="https://uw-cse442-wi20.github.io/FP-world-country-statistics/styles.4a04c8e1.css">
   <script src="https://d3js.org/topojson.v3.min.js"></script>
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -33,6 +33,7 @@
   <!-- D3 orthographic maps and geomap -->
   <script src="https://d3js.org/topojson.v2.min.js"></script>
   <script src="https://d3js.org/d3-geo.v1.min.js"></script>
+  <script src="https://unpkg.com/versor"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
 
 </head>
@@ -108,7 +109,20 @@
                   <div class="col-xl-9">
                     <div class="card shadow mb-4">
                       <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">World Map</h6>
+                        <div class="map-header">
+                          <h6 class="m-0 font-weight-bold text-primary">World Map</h6>
+                          <div class="map-view-select">
+                            <i class="fas fa-fw fa-eye" style="margin-right:10px;" ,="" aria-hidden="true"></i>
+                            <div id="view-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
+                              <label id="2d" class="btn btn-secondary active">
+                                <input type="radio" name="options" id="option1" autocomplete="off" checked=""> 2D
+                              </label>
+                              <label id="3d" class="btn btn-secondary">
+                                <input type="radio" name="options" id="option2" autocomplete="off"> 3D
+                              </label>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                       <div class="card-body">
                         <div id="map">
@@ -120,13 +134,9 @@
                   <div class="col-lg-3">
                     <div class="card shadow mb-4">
                       <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Results</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Most Recent Data</h6>
                       </div>
-                      <div class="card-body">
-                        <h2 class="h4 mb-0 text-gray-800">Country Name: China</h2>
-                        <h2 class="h4 mb-0 text-gray-800">GDP: 1B</h2>
-                        <h2 class="h4 mb-0 text-gray-800">Debt: 1B</h2>
-                        <h2 class="h4 mb-0 text-gray-800">Something: 123</h2>
+                      <div id="map-data" class="card-body">
                       </div>
                     </div>
                   </div>
@@ -200,7 +210,7 @@
                             <option value="4">2013</option> -->
                           </select>
                           <hr class="sidebar-divider">
-                          <button id="generate_button" disabled="" type="button" class="btn btn-primary disabled">Generate</button>
+                          <button id="generate_button" type="button" class="btn btn-primary">Generate</button>
                       </div>
                     </div>
                   </div>
@@ -281,9 +291,9 @@
 
   <!-- Page level custom scripts -->
   <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/pie-chart.a4ca2097.js"></script>
-  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/src.d04e198c.js"></script>
-  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/map.d2eff550.js"></script>
-  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/3dmap.bca2db5d.js"></script>
+  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/src.dfdc2374.js"></script>
+  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/map.d92c2e67.js"></script>
+  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/3dmap.2bdcd2e9.js"></script>
 </body>
 
 </html>
