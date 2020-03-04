@@ -22,20 +22,6 @@ function setTabs(){
         document.getElementById("world").classList.remove("active");
         document.getElementById("tables").classList.remove("show");
         document.getElementById("tables").classList.remove("active");
-        document.getElementById("3d-world").classList.remove("active");
-        document.getElementById("3d-world").classList.remove("show");
-        document.getElementById("home").classList.remove("active");
-        document.getElementById("home").classList.remove("show");
-    });
-    document.getElementById("3d-world-tab").addEventListener("click", function (){
-        document.getElementById("3d-world").className += " active show";
-        document.getElementById("graphs").classList.remove("show");
-        document.getElementById("graphs").classList.remove("active");
-        document.getElementById("tables").classList.remove("show");
-        document.getElementById("tables").classList.remove("active");
-        document.getElementById("world").classList.remove("show");
-        document.getElementById("world").classList.remove("active");
-        document.getElementById("home").classList.remove("active");
         document.getElementById("home").classList.remove("show");
     });
     document.getElementById("world-tab").addEventListener("click", function (){
@@ -44,8 +30,6 @@ function setTabs(){
         document.getElementById("tables").classList.remove("show");
         document.getElementById("graphs").classList.remove("active");
         document.getElementById("tables").classList.remove("active");
-        document.getElementById("3d-world").classList.remove("active");
-        document.getElementById("3d-world").classList.remove("show");
         document.getElementById("home").classList.remove("active");
         document.getElementById("home").classList.remove("show");
     });
@@ -55,9 +39,6 @@ function setTabs(){
         document.getElementById("graphs").classList.remove("show");
         document.getElementById("world").classList.remove("active");
         document.getElementById("graphs").classList.remove("active");
-        document.getElementById("3d-world").classList.remove("active");
-        document.getElementById("3d-world").classList.remove("show");
-        document.getElementById("home").classList.remove("active");
         document.getElementById("home").classList.remove("show");
     });
 }
