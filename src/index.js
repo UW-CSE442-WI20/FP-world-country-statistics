@@ -24,7 +24,8 @@ function setTabs(){
         document.getElementById("tables").classList.remove("active");
         document.getElementById("3d-world").classList.remove("active");
         document.getElementById("3d-world").classList.remove("show");
-
+        document.getElementById("home").classList.remove("active");
+        document.getElementById("home").classList.remove("show");
     });
     document.getElementById("3d-world-tab").addEventListener("click", function (){
         document.getElementById("3d-world").className += " active show";
@@ -34,6 +35,8 @@ function setTabs(){
         document.getElementById("tables").classList.remove("active");
         document.getElementById("world").classList.remove("show");
         document.getElementById("world").classList.remove("active");
+        document.getElementById("home").classList.remove("active");
+        document.getElementById("home").classList.remove("show");
     });
     document.getElementById("world-tab").addEventListener("click", function (){
         document.getElementById("world").className += " active show";
@@ -43,6 +46,8 @@ function setTabs(){
         document.getElementById("tables").classList.remove("active");
         document.getElementById("3d-world").classList.remove("active");
         document.getElementById("3d-world").classList.remove("show");
+        document.getElementById("home").classList.remove("active");
+        document.getElementById("home").classList.remove("show");
     });
     document.getElementById("table-tab").addEventListener("click", function (){
         document.getElementById("tables").className += " active show";
@@ -52,12 +57,14 @@ function setTabs(){
         document.getElementById("graphs").classList.remove("active");
         document.getElementById("3d-world").classList.remove("active");
         document.getElementById("3d-world").classList.remove("show");
+        document.getElementById("home").classList.remove("active");
+        document.getElementById("home").classList.remove("show");
     });
 }
 
 async function parseData() {
     await d3.csv(data, async function(row) {
-        
+
         let country = row["Country Name"];
         let indicator = row["Indicator Name"];
         countryNames.add(country);
@@ -113,14 +120,14 @@ async function generateCharts(){
     for(let i = 0; i < countryFilter.length; i++){
         donutData.push({color: pieChartColors[i], name: countryFilter[i], value: countryToData[countryFilter[i]][dataFilter][yearFilter]});
         let barTemp = getCountryData(countryFilter[i], dataFilter, barLabel);
-        
+
         barDataSet.push({label: countryFilter[i], backgroundColor: pieChartColors[i], data: barTemp});
 
         let lineTemp = getCountryData(countryFilter[i], dataFilter, barLabel);
         lineDataSet.push({label: countryFilter[i], backgroundColor:secondaryChartColors[i] ,borderColor: pieChartColors[i], data: lineTemp, lineTension: 0.3, pointRadius: 3,
             pointBorderWidth: 2});
 
-        
+
     }
 
     for(let i = 0; i < barLabel.length; i++){
@@ -193,12 +200,12 @@ async function init() {
     document.getElementById("country-picker").addEventListener("change", enableGenerateButton);
     document.getElementById("data-picker").addEventListener("change", enableGenerateButton);
     document.getElementById("year-picker").addEventListener("change", enableGenerateButton);
-    
+
     setTabs();
     await parseData();
     renderMap();
     await fillFilters();
-    await initCharts();    
+    await initCharts();
 }
 
 init();
