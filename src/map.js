@@ -2,49 +2,68 @@ const topo = require("./geoworld.json");
 const d3 = require("d3");
 const cc = require("./countrycodes.js");
 var active = d3.select(null);
-var width, height, zoom, drag, path, svg, g, data;
+var width, height, zoom, drag, path, svg, g, data, currentView;
 
-
-function map(d, view){
+function map(d){
   data = d;
   let dim = d3.select("#map").node().getBoundingClientRect();
   width = dim.width;
   height = dim.width/2;
-  
-  var proj = view === "2d" ? d3
+  d3.select("#view-selector").selectAll("label").on("click", updateView);
+  render("2d");
+}
+
+function updateView() {
+  if (this.id !== currentView) {
+    svg.remove();
+    render(this.id);
+  }
+}
+
+function render(view) {
+  var proj = 
+  view === "2d" ? d3
     .geoNaturalEarth1()
-    .scale(width / 6)
+    .scale(width / 5.5)
     .translate([width / 2, height / 2]) : 
-   d3.geoOrthographic().scale(width/4).translate([width/ 2, height/2]); 
+   d3.geoOrthographic().scale(width/4).translate([width/ 2, height/2]);
+
+   currentView=view;
   
    clearData();
-  zoom = d3.zoom().scaleExtent([1,6]).on("zoom", zoomed);
-  path = d3.geoPath().projection(proj);
+    zoom = d3.zoom().scaleExtent([1,6]).on("zoom", zoomed);
+    path = d3.geoPath().projection(proj);
 
-  svg = d3.select("#map")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .on("click", stopped)
+    svg = d3.select("#map")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .on("click", stopped)
 
-  svg.append("rect").attr("class", "background").attr("width", width).attr("height", height).on("click",reset);
-  g = svg.append("g");
+    svg.append("rect")
+      .attr("class", "background")
+      .attr("width", width)
+      .attr("height", height)
+      .on("click",reset);
 
-  g
-    .selectAll("path")
-    .data(topojson.feature(topo, topo.objects.countries).features)
-    .enter()
-    .append("path")
-    .attr("d", path)
-    .attr("class", "feature")
-    .on("click", focus);
+    g = svg.append("g");
+
+    g
+      .selectAll("path")
+      .data(topojson.feature(topo, topo.objects.countries).features)
+      .enter()
+      .append("path")
+      .attr("d", path)
+      .attr("class", "feature")
+      .on("click", focus);
 
   svg.call(zoom);
-  svg.call(d3.drag().on("start", dragstarted).on("drag", dragged));
+  svg.call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged));
 }
 
 function focus(node){
-  console.log(node);
   if (active.node() === this) return reset();
   active.classed("active", false);
   active = d3.select(this).classed("active", true);
@@ -61,7 +80,6 @@ function focus(node){
       .duration(750)
       .style("stroke-width", 1.5 / scale + "px")
       .call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
-  
   displayData(node.properties.name);
 }
 
@@ -98,7 +116,6 @@ function stopped() {
 }
 
 function dragstarted() {
-  console.log("here");
   v0 = versor.cartesian(proj.invert(d3.mouse(this)));
   r0 = proj.rotate();
   q0 = versor(r0);
@@ -109,7 +126,7 @@ function dragged() {
       q1 = versor.multiply(q0, versor.delta(v0, v1)),
       r1 = versor.rotation(q1);
   proj.rotate(r1);
-  refresh();
+  svg.selectAll(".countries path").attr("d", path);
 }
 
 

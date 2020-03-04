@@ -12,7 +12,7 @@ var countryToData = {};
 
 var data = require("./data.csv");
 function renderMap(){
-    map(countryToData, "2d");
+    map(countryToData);
 }
 
 function setTabs(){
@@ -164,6 +164,7 @@ function getCountryData(country, dataType, years){
 }
 
 async function enableGenerateButton(){
+    console.log("here");
     let countryFilter = $("#country-picker").val();
     let dataFilter = $("#data-picker").val();
     let yearFilter = $("#year-picker").val();
@@ -180,8 +181,10 @@ async function enableGenerateButton(){
 }
 
 async function initCharts(){
-    $("#country-picker").val(["Argentina", "Chile", "Hong Kong SAR, China"]);
+    $("#country-picker").val("World");
+    $('.selectpicker').selectpicker('refresh');
     $("#data-picker").val("Population, total");
+    $('.selectpicker').selectpicker('refresh');
     $("#year-picker").val("2000");
     $('.selectpicker').selectpicker('refresh');
     generateCharts();
@@ -192,11 +195,12 @@ async function init() {
     document.getElementById("country-picker").addEventListener("change", enableGenerateButton);
     document.getElementById("data-picker").addEventListener("change", enableGenerateButton);
     document.getElementById("year-picker").addEventListener("change", enableGenerateButton);
-    renderMap();
+    
     setTabs();
     await parseData();
+    renderMap();
     await fillFilters();
-    await initCharts();
+    await initCharts();    
 }
 
 init();

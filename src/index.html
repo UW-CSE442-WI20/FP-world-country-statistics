@@ -33,6 +33,7 @@
   <!-- D3 orthographic maps and geomap -->
   <script src="https://d3js.org/topojson.v2.min.js"></script>
   <script src="https://d3js.org/d3-geo.v1.min.js"></script>
+  <script src="https://unpkg.com/versor"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
 
 </head>
@@ -112,9 +113,14 @@
                           <h6 class="m-0 font-weight-bold text-primary">World Map</h6>
                           <div class="map-view-select">
                             <i class="fas fa-fw fa-eye" style="margin-right:10px;", aria-hidden="true"></i>
-                            <span></span>
-                            <button id="2d-view" class="view-toggle">2D</button>
-                            <button id="3d-view" class="view-toggle">3D</button>
+                            <div id="view-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
+                              <label id="2d" class="btn btn-secondary active">
+                                <input type="radio" name="options" id="option1" autocomplete="off" checked> 2D
+                              </label>
+                              <label id="3d" class="btn btn-secondary">
+                                <input type="radio" name="options" id="option2" autocomplete="off"> 3D
+                              </label>
+                            </div>
                           </div>
                         </div>
                       </div>
