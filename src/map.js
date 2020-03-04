@@ -2,23 +2,24 @@ const topo = require("./geoworld.json");
 const d3 = require("d3");
 const cc = require("./countrycodes.js");
 var active = d3.select(null);
-var width, height, zoom, path, svg, g, data;
-clearData();
+var width, height, zoom, drag, path, svg, g, data;
 
-function map(d){
+
+function map(d, view){
   data = d;
   let dim = d3.select("#map").node().getBoundingClientRect();
   width = dim.width;
   height = dim.width/2;
   
+  var proj = view === "2d" ? d3
+    .geoNaturalEarth1()
+    .scale(width / 6)
+    .translate([width / 2, height / 2]) : 
+   d3.geoOrthographic().scale(width/4).translate([width/ 2, height/2]); 
+  
+   clearData();
   zoom = d3.zoom().scaleExtent([1,6]).on("zoom", zoomed);
-
-  path = d3.geoPath().projection(
-    d3
-      .geoNaturalEarth1()
-      .scale(width / 6)
-      .translate([width / 2, height / 2])
-  );
+  path = d3.geoPath().projection(proj);
 
   svg = d3.select("#map")
     .append("svg")
@@ -39,6 +40,7 @@ function map(d){
     .on("click", focus);
 
   svg.call(zoom);
+  svg.call(d3.drag().on("start", dragstarted).on("drag", dragged));
 }
 
 function focus(node){
@@ -93,6 +95,21 @@ function displayData(country) {
 
 function stopped() {
   if (d3.event.defaultPrevented) d3.event.stopPropagation();
+}
+
+function dragstarted() {
+  console.log("here");
+  v0 = versor.cartesian(proj.invert(d3.mouse(this)));
+  r0 = proj.rotate();
+  q0 = versor(r0);
+}
+  
+function dragged() {
+  var v1 = versor.cartesian(proj.rotate(r0).invert(d3.mouse(this))),
+      q1 = versor.multiply(q0, versor.delta(v0, v1)),
+      r1 = versor.rotation(q1);
+  proj.rotate(r1);
+  refresh();
 }
 
 
