@@ -2,7 +2,8 @@ const topo = require("./geoworld.json");
 const d3 = require("d3");
 const cc = require("./countrycodes.js");
 var active = d3.select(null);
-var width, height, zoom, drag, path, svg, g, data, currentView;
+
+var width, height, zoom, drag, path, svg, g, data, currentView, proj;
 
 function map(d){
   data = d;
@@ -21,17 +22,22 @@ function updateView() {
 }
 
 function render(view) {
-  var proj = 
+  proj =
   view === "2d" ? d3
     .geoNaturalEarth1()
     .scale(width / 5.5)
-    .translate([width / 2, height / 2]) : 
+    .translate([width / 2, height / 2]) :
    d3.geoOrthographic().scale(width/4).translate([width/ 2, height/2]);
 
+
+   // drag sensitivity constant
+   // initial map scale
+   const initSense = 75;
+   const initScale = proj.scale();
+
    currentView=view;
-  
+
    clearData();
-    zoom = d3.zoom().scaleExtent([1,6]).on("zoom", zoomed);
     path = d3.geoPath().projection(proj);
 
     svg = d3.select("#map")
@@ -57,10 +63,41 @@ function render(view) {
       .attr("class", "feature")
       .on("click", focus);
 
-  svg.call(zoom);
+  // zoom = d3.zoom().scaleExtent([1,6]).on("zoom", zoomed);
+  //svg.call(zoom);
+  //svg.call(d3.zoom().scaleExtent([1,6]).on("zoom", zoomed));
+
+  // drag call
+  svg.call(d3.drag().on('drag', () => {
+    const rotate = proj.rotate()
+    const k = initSense / proj.scale()
+    proj.rotate([
+      rotate[0] + d3.event.dx * k,
+      0
+    ])
+    path = d3.geoPath().projection(proj)
+    svg.selectAll("path").attr("d", path)
+  }))
+
+  // ordinary zoom call
+  svg.call(d3.zoom().on('zoom', () => {
+    if(d3.event.transform.k > 0.3) {
+      proj.scale(initScale * d3.event.transform.k)
+      path = d3.geoPath().projection(proj)
+      svg.selectAll("path").attr("d", path)
+    }
+    else {
+      d3.event.transform.k = 0.3
+    }
+  }))
+
+  // For focus zoom call
+  zoom = d3.zoom().scaleExtent([1,6]).on("zoom", zoomed);
+
+  /**
   svg.call(d3.drag()
         .on("start", dragstarted)
-        .on("drag", dragged));
+        .on("drag", dragged)); */
 }
 
 function focus(node){
@@ -86,11 +123,11 @@ function focus(node){
 function clearData() {
   d3.select("#map-data").style("padding-top", "1.25rem").html("<h4>Select a country to get individual stats.</h4");
 }
-  
+
 function reset() {
   active.classed("active", false);
   active = d3.select(null);
-  
+
   svg.transition()
       .duration(750)
       .call(zoom.transform, d3.zoomIdentity);
@@ -120,7 +157,7 @@ function dragstarted() {
   r0 = proj.rotate();
   q0 = versor(r0);
 }
-  
+
 function dragged() {
   var v1 = versor.cartesian(proj.rotate(r0).invert(d3.mouse(this))),
       q1 = versor.multiply(q0, versor.delta(v0, v1)),
