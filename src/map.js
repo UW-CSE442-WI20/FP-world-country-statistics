@@ -6,6 +6,8 @@ var active = d3.select(null);
 var width, height, zoom, drag, path, svg, g, data, currentView, proj;
 
 function map(d){
+  console.log(d);
+  console.log(topo);
   data = d;
   let dim = d3.select("#map").node().getBoundingClientRect();
   width = dim.width;
@@ -68,19 +70,22 @@ function render(view) {
   //svg.call(d3.zoom().scaleExtent([1,6]).on("zoom", zoomed));
 
   // drag call
-  svg.call(d3.drag().on('drag', () => {
-    const rotate = proj.rotate()
-    const k = initSense / proj.scale()
-    proj.rotate([
-      rotate[0] + d3.event.dx * k,
-      0
-    ])
-    path = d3.geoPath().projection(proj)
-    svg.selectAll("path").attr("d", path)
+  svg.call(d3.drag().on('drag', function() {
+    if (view != "2d") {
+      const rotate = proj.rotate()
+      const k = initSense / proj.scale()
+
+      proj.rotate([
+        rotate[0] + d3.event.dx * k,
+        0
+      ])
+      path = d3.geoPath().projection(proj)
+      svg.selectAll("path").attr("d", path)
+    }
   }))
 
   // ordinary zoom call
-  svg.call(d3.zoom().on('zoom', () => {
+  svg.call(d3.zoom().on('zoom', function() {
     if(d3.event.transform.k > 0.3) {
       proj.scale(initScale * d3.event.transform.k)
       path = d3.geoPath().projection(proj)
@@ -140,11 +145,59 @@ function zoomed() {
 }
 
 function displayData(country) {
+  var countryCode;
+  console.log(country);
+  if (country == "Russia") {
+    country = "Russian Federation";
+    countryCode = cc.codes[country];
+  } else if (country == "Democratic Republic of Congo") {
+    country = "Congo, Dem. Rep.";
+    countryCode = cc.codes["Congo, Democratic Republic of the"];
+  } else if (country == "Central African Rep.") {
+    country = "Central African Republic";
+    countryCode = cc.codes["Central African Republic"]
+  } else if (country == "Congo") {
+    country = "Congo, Rep.";
+    countryCode = cc.codes["Congo"];
+  } else if (country == "North Korea") {
+      country = "Korea, Dem. Rep.";
+      countryCode = cc.codes["Korea: Democratic People\'S Republic of"];
+  } else if (country == "South Korea") {
+    country = "Korea, Rep.";
+    countryCode = cc.codes["Korea: Republic of"];
+  } else if (country == "Dominican Rep.") {
+    country = "Dominican Republic";
+    countryCode = cc.codes["Dominican Republic"];
+  } else if (country == "Palestine") {
+    countryCode = "PS";
+  } else if (country == "Taiwan") {
+    countryCode = "TW";
+  } else if (country == "Syria") {
+    country = "Syrian Arab Republic";
+    countryCode = cc.codes["Syrian Arab Republic"];
+  } else if (country == "N. Cyprus") {
+    country = "Cyprus";
+    countryCode = cc.codes["Cyprus"];
+  } else if (country == "Iran") {
+    country = "Iran, Islamic Rep.";
+    countryCode = cc.codes["Iran: Islamic Republic Of"];
+  } else if (country == "S. Sudan") {
+    country = "South Sudan";
+    countryCode = "SS";
+  } else {
+    countryCode = cc.codes[country];
+  }
+
   let stats = data[country];
-  let html = "<div class='map-data-header'><h3 style='margin-top:16px'>" + country + "</h3><img src='https://www.countryflags.io/" + cc.codes[country] + "/flat/64.png' padding=0px></div>";
-  Object.keys(stats).forEach(key => {
-    html += key + " : " + stats[key][2015] + "<br/>";
-  });
+  let html = "<div class='map-data-header'><h3 style='margin-top:16px'>" + country + "</h3><img src='https://www.countryflags.io/" + countryCode + "/flat/64.png' padding=0px></div>";
+  if (stats) {
+    Object.keys(stats).forEach(key => {
+      html += key + " : " + stats[key][2015] + "<br/>";
+    });
+  } else {
+    html += "Data is currently missing or unavailable for this country.";
+  }
+
   d3.select("#map-data").style("padding-top", "0px").html(html);
   }
 
@@ -152,6 +205,7 @@ function stopped() {
   if (d3.event.defaultPrevented) d3.event.stopPropagation();
 }
 
+/*
 function dragstarted() {
   v0 = versor.cartesian(proj.invert(d3.mouse(this)));
   r0 = proj.rotate();
@@ -164,7 +218,7 @@ function dragged() {
       r1 = versor.rotation(q1);
   proj.rotate(r1);
   svg.selectAll(".countries path").attr("d", path);
-}
+} */
 
 
 export default map;

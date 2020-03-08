@@ -157,6 +157,8 @@ async function enableGenerateButton(){
     let dataFilter = $("#data-picker").val();
     let yearFilter = $("#year-picker").val();
 
+    console.log(dataFilter);
+    console.log(countryFilter);
     if(countryFilter.length === 0 || dataFilter === "" || yearFilter === ""){
         document.getElementById("generate_button").classList.remove("active");
         document.getElementById("generate_button").className += " disabled";
