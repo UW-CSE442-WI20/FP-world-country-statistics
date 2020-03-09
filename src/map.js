@@ -238,7 +238,23 @@ function displayData(country) {
   }
 
   let stats = data[country];
-  let html = "<div class='map-data-header'><h3 style='margin-top:16px'>" + country + "</h3><img src='https://www.countryflags.io/" + countryCode + "/flat/64.png' padding=0px></div>";
+  let html = "";
+  // Check image URL
+
+    var test = 'https://www.countryflags.io/"' + countryCode + '/flat/64.png';
+    function UrlExists(url) {
+        var http = new XMLHttpRequest();
+        http.open('HEAD', url, false);
+        http.send();
+        if (http.status != 404)
+        html = "<div class='map-data-header'><h3 style='margin-top:16px'>" + country + "</h3><img src='https://www.countryflags.io/" + countryCode + "/flat/64.png' padding=0px></div>"
+        else
+        window.location.reload();
+        html = "<div class='map-data-header'><h3 style='margin-top:16px'>" + country + "</h3></div>"
+        console.log("Banner not available for " + country);
+    }
+    UrlExists(test);
+
   if (stats) {
     Object.keys(stats).forEach(key => {
       if (stats[key][2015]) {
