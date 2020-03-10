@@ -88,9 +88,10 @@ async function generateCharts(){
     lineData.labels = barLabel;
     let radarDataSet = [];
     let  radarData = {};
-    radarData.labels = countryFilter;
+    console.log(countryToData);
     for(let i = 0; i < countryFilter.length; i++){
-        donutData.push({color: pieChartColors[i], name: countryFilter[i], value: countryToData[countryFilter[i]][dataFilter][yearFilter]});
+        var country_name = countryToData[countryFilter[i]][dataFilter][yearFilter] == '' ? countryFilter[i] + ": data not available" : countryFilter[i];
+        donutData.push({color: pieChartColors[i], name: country_name, value: countryToData[countryFilter[i]][dataFilter][yearFilter]});
         let barTemp = getCountryData(countryFilter[i], dataFilter, barLabel);
 
         barDataSet.push({label: countryFilter[i], backgroundColor: pieChartColors[i], data: barTemp});
