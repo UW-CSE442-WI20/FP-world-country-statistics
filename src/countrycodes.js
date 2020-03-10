@@ -469,7 +469,7 @@ export var codes = {
   ,
   'Venezuela': 'VE'
   ,
-  'Viet Nam': 'VN'
+  'Vietnam': 'VN'
   ,
   'Virgin Islands: British': 'VG'
   ,

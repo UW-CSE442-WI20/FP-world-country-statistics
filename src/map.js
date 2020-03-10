@@ -1,17 +1,17 @@
 const topo = require("./geoworld.json");
 const d3 = require("d3");
 const cc = require("./countrycodes.js");
+const newcc = require("./cc.json");
 var active = d3.select(null);
 
 var width, height, zoom, drag, path, svg, g, data, currentView, proj;
+var focused = false;
 
 function map(d){
-  console.log(d);
-  console.log(topo);
   data = d;
   let dim = d3.select("#map").node().getBoundingClientRect();
   width = dim.width;
-  height = dim.width/2;
+  height = 0.75 * window.innerHeight;
   d3.select("#view-selector").selectAll("label").on("click", updateView);
   render("2d");
 }
@@ -71,7 +71,7 @@ function render(view) {
 
   // drag call
   svg.call(d3.drag().on('drag', function() {
-    if (view != "2d") {
+    if (view != "2d" && !focused) {
       const rotate = proj.rotate()
       const k = initSense / proj.scale()
 
@@ -106,6 +106,31 @@ function render(view) {
 }
 
 function focus(node){
+  focused = true;
+
+  // Rotate on center
+  if (currentView != "2d") {
+    var center = d3.geoCentroid(node);
+    var rotate = proj.rotate();
+    proj.rotate([-center[0], 0]);
+    path = d3.geoPath().projection(proj)
+    svg.selectAll("path").attr("d", path);
+    /*
+    svg.transition()
+     .duration(750)
+     .tween("rotateThis", function() {
+       console.log("here");
+       var center = d3.geoCentroid(node);
+       var r = d3.interpolate(proj.rotate()[0], -center[0]);
+       return function (t) {
+         proj.rotate([r(t), 0]);
+         path = d3.geoPath().projection(proj)
+         svg.selectAll("path").attr("d", path);
+       }
+    });*/
+  }
+
+
   if (active.node() === this) return reset();
   active.classed("active", false);
   active = d3.select(this).classed("active", true);
@@ -122,6 +147,7 @@ function focus(node){
       .duration(750)
       .style("stroke-width", 1.5 / scale + "px")
       .call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
+
   displayData(node.properties.name);
 }
 
@@ -130,6 +156,8 @@ function clearData() {
 }
 
 function reset() {
+  focused = false;
+
   active.classed("active", false);
   active = d3.select(null);
 
@@ -145,8 +173,8 @@ function zoomed() {
 }
 
 function displayData(country) {
+  // Fixed inconsistency
   var countryCode;
-  console.log(country);
   if (country == "Russia") {
     country = "Russian Federation";
     countryCode = cc.codes[country];
@@ -184,6 +212,27 @@ function displayData(country) {
   } else if (country == "S. Sudan") {
     country = "South Sudan";
     countryCode = "SS";
+  } else if (country == "Laos") {
+    country = "Lao PDR";
+    countryCode = "LA";
+  } else if (country == "eSwatini") {
+    country = "Eswatini";
+    countryCode = "SZ";
+  } else if (country == "Kyrgyzstan") {
+    country = "Kyrgyz Republic";
+  } else if (country == "Côte d'Ivoire") {
+    country = "Cote d'Ivoire";
+    countryCode = cc.codes["Cote D\'Ivoire"];
+  } else if (country == "W. Sahara") {
+    country = "Western Sahara";
+    countryCode = cc.codes["Western Sahara"];
+  } else if (country == "Libya") {
+    countryCode = "LY";
+  } else if (country == "Egypt") {
+    country = "Egypt, Arab Rep.";
+    countryCode = cc.codes["Egypt"]
+  } else if (country == "Moldova") {
+    countryCode = cc.codes["Moldova: Republic of"];
   } else {
     countryCode = cc.codes[country];
   }
@@ -192,7 +241,11 @@ function displayData(country) {
   let html = "<div class='map-data-header'><h3 style='margin-top:16px'>" + country + "</h3><img src='https://www.countryflags.io/" + countryCode + "/flat/64.png' padding=0px></div>";
   if (stats) {
     Object.keys(stats).forEach(key => {
-      html += key + " : " + stats[key][2015] + "<br/>";
+      if (stats[key][2015]) {
+        html += "<b>" + key + " : </b>" + stats[key][2015] + "<br/> <br/>";
+      } else {
+        html += "<b>" + key + " : </b>" + "N/A" + "<br/> <br/>";
+      }
     });
   } else {
     html += "Data is currently missing or unavailable for this country.";
