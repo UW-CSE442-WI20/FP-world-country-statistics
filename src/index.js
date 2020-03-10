@@ -33,14 +33,6 @@ function setTabs(){
         document.getElementById("home").classList.remove("active");
         document.getElementById("home").classList.remove("show");
     });
-    document.getElementById("table-tab").addEventListener("click", function (){
-        document.getElementById("tables").className += " active show";
-        document.getElementById("world").classList.remove("show");
-        document.getElementById("graphs").classList.remove("show");
-        document.getElementById("world").classList.remove("active");
-        document.getElementById("graphs").classList.remove("active");
-        document.getElementById("home").classList.remove("show");
-    });
 }
 
 async function parseData() {
@@ -61,7 +53,6 @@ async function parseData() {
         countryObject[indicator] = indicatorObject;
         countryToData[country] = countryObject;
     })
-
 }
 
 async function fillFilters(){
