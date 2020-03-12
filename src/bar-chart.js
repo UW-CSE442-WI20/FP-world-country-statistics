@@ -26,9 +26,15 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 
 // Bar Chart Example
 async function makeBarChart(final_data){
-
 document.getElementById("bar-container").innerHTML = "<canvas id='bar'></canvas>";
 var ctx = document.getElementById("bar");
+console.log(final_data)
+for(let i = 0; i < final_data.datasets.length; i++){
+  if(final_data.datasets[i].data.includes("")){
+    final_data.datasets[i].hidden = true;
+    final_data.datasets[i].label += ": Data is not available";
+  }
+}
 var myBarChart = new Chart(ctx, {
   type: 'bar',
   data: {

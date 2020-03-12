@@ -95,7 +95,9 @@ var myLineChart = new Chart(ctx, {
       callbacks: {
         label: function(tooltipItem, chart) {
           var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-          return datasetLabel + " : " + tooltipItem.yLabel;
+          var value = tooltipItem.yLabel === 0 ? "Data unavailable" : tooltipItem.yLabel;
+          console.log(value);
+          return datasetLabel + " : " + value;
         }
       }
     }
