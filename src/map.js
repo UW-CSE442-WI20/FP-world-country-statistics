@@ -84,17 +84,17 @@ function render(view) {
     }
   }))
 
-  // ordinary zoom call
-  svg.call(d3.zoom().on('zoom', function() {
-    if(d3.event.transform.k > 0.3) {
-      proj.scale(initScale * d3.event.transform.k)
-      path = d3.geoPath().projection(proj)
-      svg.selectAll("path").attr("d", path)
-    }
-    else {
-      d3.event.transform.k = 0.3
-    }
-  }))
+  // // ordinary zoom call
+  // svg.call(d3.zoom().on('zoom', function() {
+  //   if(d3.event.transform.k > 0.3) {
+  //     proj.scale(initScale * d3.event.transform.k)
+  //     path = d3.geoPath().projection(proj)
+  //     svg.selectAll("path").attr("d", path)
+  //   }
+  //   else {
+  //     d3.event.transform.k = 0.3
+  //   }
+  // }))
 
   // For focus zoom call
   zoom = d3.zoom().scaleExtent([1,6]).on("zoom", zoomed);
