@@ -1,7 +1,6 @@
 import makeDonut from "./pie-chart.js";
 import makeLineChart from "./line-chart.js";
 import makeBarChart from "./bar-chart.js";
-import makeRadarChart from "./radar-chart.js";
 import map from "./map.js";
 import { line } from "d3";
 const d3 = require("d3");
@@ -87,8 +86,7 @@ async function generateCharts(){
     let lineDataSet = [];
     let  lineData = {};
     lineData.labels = barLabel;
-    let radarDataSet = [];
-    let  radarData = {};
+
     for(let i = 0; i < countryFilter.length; i++){
         var country_name = countryToData[countryFilter[i]][dataFilter][yearFilter] == '' ? countryFilter[i] + ": data not available" : countryFilter[i];
         donutData.push({color: pieChartColors[i], name: country_name, value: countryToData[countryFilter[i]][dataFilter][yearFilter]});
@@ -98,29 +96,22 @@ async function generateCharts(){
         let lineTemp = getCountryData(countryFilter[i], dataFilter, barLabel);
         lineDataSet.push({label: countryFilter[i], backgroundColor:secondaryChartColors[i] ,borderColor: pieChartColors[i], data: lineTemp, lineTension: 0.3, pointRadius: 3,
             pointBorderWidth: 2});
-
-
     }
 
     for(let i = 0; i < barLabel.length; i++){
         let year = barLabel[i];
-        let tempRadar = {label: year, backgroundColor:secondaryChartColors[i] ,
-            borderColor: pieChartColors[i],
-            fill: true};
+        
         let data =[];
         for(let j = 0; j < lineDataSet.length; j++){
             data.push(lineDataSet[j].data[i]);
         }
-        tempRadar.data = data;
-        radarDataSet.push(tempRadar);
+
     }
     barData.datasets = barDataSet;
     lineData.datasets = lineDataSet;
-    radarData.datasets = radarDataSet;
     makeDonut(donutData);
     makeBarChart(barData);
     makeLineChart(lineData);
-    makeRadarChart(radarData);
 
 }
 
