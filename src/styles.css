@@ -17,8 +17,9 @@ path:hover {
   cursor: pointer;
 }
 
-.feature.active {
-  fill: steelblue;
+.map-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .map-header, .map-data-header, .map-view-select {
@@ -28,6 +29,42 @@ path:hover {
 
 .map-header, .map-data-header {
   justify-content: space-between;
+}
+
+
+.legend {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.legend-title {
+  padding-top: 10px;
+  color: black;
+  font-size: larger;
+  text-align: center;
+}
+
+.legend-items {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+}
+
+.legend-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.legend-color {
+  width: 50px;
+  height: 20px;
+  box-shadow: 1px 1px rgba(0, 0, 0, 0.1); 
+  margin-right: 5px;
+}
+
+.space {
+  width: auto;
 }
 
 .view-toggle {
@@ -52,3 +89,73 @@ path:hover {
 }
 
 /* -------- */
+
+.goal-selector {
+  display: none;
+  height: 100%;
+  padding: 10px;
+  max-width: 50px;
+}
+
+.goal-selector-active {
+  display: flex;
+  flex-direction: column;
+  padding-right: 10px;
+  width: 200px;
+  box-shadow: rgba(0, 0, 0, 0.1);
+}
+
+.btn-nav{
+  background-color:inherit;
+  border:none;
+  display: flex;
+  text-align: left;
+  align-items: center;
+  height: 75px;
+  outline: none;
+  padding: 10px;
+}
+
+.checked {
+  color: #4e73df;
+  transition: 0.3s ease-in-out;
+}
+
+.fas {
+  margin-right: 10px;
+  pointer-events: none;
+  vertical-align: middle;
+}
+
+.btn-nav:hover {
+  font-weight: bold;
+  outline: none;
+}
+.btn-nav:focus {
+  outline: none;
+}
+
+.btn-nav span {
+  pointer-events: none;
+  position: relative;
+}
+
+.btn-nav span::after {    
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 2px;
+  left: 0;
+  position: absolute;
+  background: #4e73df;
+  transition: width 0.3s ease-in-out 0s, left 0.3s ease 0s;
+  width: 0;
+}
+
+.btn-nav:hover span::after {
+  width: 100%;
+  left: 0;
+}
+
+
+

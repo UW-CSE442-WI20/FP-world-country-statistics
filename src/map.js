@@ -4,16 +4,31 @@ const cc = require("./countrycodes.js");
 const newcc = require("./cc.json");
 var active = d3.select(null);
 
-var width, height, zoom, drag, path, svg, g, data, currentView, proj;
+var width, height, zoom, drag, path, g, data, currentView, proj;
+var svg, legend;
+var currFilter, currYear;
 var focused = false;
 
 function map(d){
   data = d;
   let dim = d3.select("#map").node().getBoundingClientRect();
-  width = dim.width;
-  height = 0.75 * window.innerHeight;
+  width = dim.width * 0.95;
+  height = width * 0.6;
   d3.select("#view-selector").selectAll("label").on("click", updateView);
+  currFilter = $("#map-filter-selector").val(),
+  currYear = $("#map-year-selector").val();
+
+  legend = d3.select("#map-legend").append("div").attr("width", width/2 + "px").attr("class", "legend");
   render("2d");
+  d3.select("#map-year-selector").on("change", function() {
+    currYear = $(this);
+    fill();
+  });
+  d3.select("#map-filter-selector").on("change", function() {
+    currFilter = $("#map-filter-selector").val();
+    fill();
+  });
+  
 }
 
 function updateView() {
@@ -94,7 +109,7 @@ function render(view) {
     else {
       d3.event.transform.k = 0.3
     }
-  }))
+  }));
 
   // For focus zoom call
   zoom = d3.zoom().scaleExtent([1,6]).on("zoom", zoomed);
@@ -103,6 +118,93 @@ function render(view) {
   svg.call(d3.drag()
         .on("start", dragstarted)
         .on("drag", dragged)); */
+  fill();
+}
+
+function fill() {
+  console.log("here");
+  var filteredData = {};
+  var colorScale;
+  Object.keys(data).forEach(country => {
+    let value = data[country][currFilter];
+    if (value !== undefined && value[currYear] !== "" && country !== "World") {
+      filteredData[country] = Number(value[currYear]);
+    } else {
+      console.log(country, currFilter, currYear);
+    }
+  });
+  let dataCount = Object.keys(filteredData).length;
+  if (dataCount > 0) {
+    d3.select("#map-info").html("Data available for " + dataCount + " countries.");
+    d3.select("#map-title").html(currFilter + " in " + currYear);
+
+    let domain = Object.values(filteredData);
+    let maxValue = d3.extent(domain)[1];
+
+    for (let i = 0; i < 8; i++) {
+      if (maxValue < Math.pow(10, i)) {
+        maxValue = Math.pow(10, i);
+        break;
+      }
+    }
+    colorScale = d3.scaleQuantize()
+                      .domain([0, maxValue])
+                      .range(d3.schemeYlGnBu[Math.min(5, domain.length)]);
+                      legend.html(generateLegend(domain, colorScale));
+    d3.selectAll("path").style("fill", function(d) {
+      let country = d.properties.name;
+      if (filteredData[country] !== undefined) {
+        let color = colorScale(filteredData[country]);
+        return color;
+      }
+    });
+  } else {
+      d3.select("#map-info").html("Data is unavailable for selected year and statistic.");
+      d3.select("#map-title").html("");
+      d3.select("#map-legend").html("");
+  }
+
+  d3.selectAll("path").style("fill", function(d) {
+    let country = d.properties.name;
+    if (filteredData[country] !== undefined) {
+      let color = colorScale(filteredData[country]);
+      return color;
+    }
+  })
+  
+}
+
+function polishNum(num) {
+  if (num > 100000) {
+    return (num/100000) + "m";
+  } else if (num > 1000) {
+    return (num/1000) + "k";
+  } else {
+    return num;
+  }
+}
+
+function generateLegend(data, scale) {
+  let rangeToColor = {};
+  data.forEach(d => {
+    let r = scale.invertExtent(scale(d));
+    rangeToColor[r] = scale(d) }
+  );
+  let options = Object.keys(rangeToColor).sort((a,b) => {
+    console.log(a, b);
+    let res = Number(a.split(",")[0]) < Number(b.split(",")[0]);
+    console.log(res);
+    return res ? -1 : 1;
+  });
+  console.log(options);
+  let s = "<div class='legend-items'>";
+  options.forEach(d => {
+    let r = d.split(",");
+    s+= "<div class='legend-item'><div class='legend-color' style='background-color:" + rangeToColor[d] + ";'></div>" +
+    "<div><center>" + polishNum(r[0]) + "-" + polishNum(r[1]) + "</center></div></div>";
+  })
+  s+= "</div>";
+  return s;
 }
 
 function focus(node){
@@ -238,18 +340,21 @@ function displayData(country) {
   }
 
   let stats = data[country];
+  console.log(stats);
+  let unknown = "<br>Unknown stats:<br>";
   let html = "<div class='map-data-header'><h3 style='margin-top:16px'>" + country + "</h3><img src='https://www.countryflags.io/" + countryCode + "/flat/64.png' padding=0px></div>";
   if (stats) {
     Object.keys(stats).forEach(key => {
-      if (stats[key][2015]) {
-        html += "<b>" + key + " : </b>" + stats[key][2015] + "<br/> <br/>";
+      if (stats[key] && stats[key][2015]) {
+        html += "<b>" + key + " : </b>" + stats[key][2015] + "<br/>";
       } else {
-        html += "<b>" + key + " : </b>" + "N/A" + "<br/> <br/>";
+        unknown += "<t>" + key + "<br>";
       }
     });
   } else {
     html += "Data is currently missing or unavailable for this country.";
   }
+  html+= unknown;
 
   d3.select("#map-data").style("padding-top", "0px").html(html);
   }

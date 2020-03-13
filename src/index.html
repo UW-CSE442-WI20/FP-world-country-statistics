@@ -36,6 +36,8 @@
   <script src="https://unpkg.com/versor"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
 
+  <script src = "https://cdnjs.cloudflare.com/ajax/libs/d3-legend/1.13.0/d3-legend.min.js"></script>
+
 </head>
 
 <body id="page-top">
@@ -44,31 +46,17 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
+    <nav class="navbar navbar-dark bg-primary">
+      <ul class="navbar-nav" id="main-menu">
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon">
+      <a class="navbar-brand" href="index.html">
+        <div class="navbar-brand-icon">
           <i class="fas fa-home"></i>
-        </div>
-        <div class="sidebar-brand-text mx-3">World Statistics</div>
+        World Statistics</div>
       </a>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider my-0">
-
-      <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
-        <a class="nav-link" href="index.html">
-          <i class="fas fa-fw fa-search"></i>
-          <span>Dashboard</span></a>
-      </li>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider">
-
+    
       <li class="nav-item">
-        <a class="nav-link" id="world-tab" data-toggle="tab" href="#world" role="tab" aria-controls="contact" aria-selected="true">
+        <a class="nav-link" id="world-tab" data-toggle="tab" href="#world" role="tab" aria-selected="true">
           <i class="fas fa-fw fa-globe" aria-hidden="true"></i><span>World View</span></a>
       </li>
       <li class="nav-item">
@@ -76,10 +64,10 @@
           <i class="fas fa-fw fa-chart-area" >
           </i><span>Charts</span></a>
       </li>
-
-
     </ul>
+    </nav>
     <!-- End of Sidebar -->
+    </div>
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -90,11 +78,37 @@
 
         <!-- Begin Page Content -->
 
-        <div class="container-fluid" style="padding-top: 50px;">
-
+        <div class="container-fluid" style="padding:5px;">
+          <div class="goal-selector" id="goal-selector" style="padding-left:10px;padding-top:10px;">
+            Millenium Development Goals
+            <br>
+            <button class="btn-nav checked" id="goal-1">
+              <i class="fas fa-fw fa-coins"></i><span>Poverty and Hunger</span></button>
+            <button class="btn-nav" id="goal-2">
+              <i class="fas fa-fw fa-graduation-cap"></i><span>Education</span></button>
+            <button class="btn-nav" id="goal-3">
+              <i class="fas fa-fw fa-venus-mars" aria-hidden="true"></i><span>Gender Equality</span></button>
+            <button class="btn-nav" id="goal-4">
+              <i class="fas fa-fw fa-skull-crossbones" >
+              </i><span>Child Mortality</span></button>
+            <button class="btn-nav" id="goal-5">
+              <i class="fas fa-fw fa-heartbeat" >
+              </i><span>Maternal Health</span></button>
+      
+            <button class="btn-nav" id="goal-6">
+              <i class="fas fa-fw fa-medkit" >
+              </i><span>Disease Prevention</span></button>
+    
+            <button class="btn-nav" id="goal-7">
+              <i class="fas fa-fw fa-leaf">
+              </i><span>Envrionment</span></button>
+            <button class="btn-nav" id="goal-8">
+              <i class="fas fa-fw fa-hands-helping" >
+              </i><span>Global Partnerships</span></button>
+      </div>
 
           <div class="tab-content" id="myTabContent">
-
+            <div class="banner"></div>
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
               <div class="row">
                 <div class="col-12" >
@@ -143,15 +157,20 @@ Each goal had specific targets, and dates for achieving those targets. The 8 goa
                 </div>
               </div>
             </div>
-
+            
             <div class="tab-pane fade active" id="world" role="tabpanel" aria-labelledby="map-tab">
-              <h1 class="h3 mb-0 text-gray-800">World View</h1>
+              
+          
                 <div class="row">
                   <div class="col-xl-9" >
                     <div class="card shadow mb-4" >
                       <div class="card-header py-3">
                         <div class="map-header">
                           <h6 class="m-0 font-weight-bold text-primary">World Map</h6>
+                          <div class="space"></div>
+                          <select class="selectpicker show-tick" data-width="10%" data-live-search="true" id="map-year-selector"></select>
+                          <select class="selectpicker show-tick" data-width="30%" data-live-search="true" id="map-filter-selector"></select>
+                  
                           <div class="map-view-select">
                             <i class="fas fa-fw fa-eye" style="margin-right:10px;", aria-hidden="true"></i>
                             <div id="view-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -165,9 +184,14 @@ Each goal had specific targets, and dates for achieving those targets. The 8 goa
                           </div>
                         </div>
                       </div>
-                      <div class="card-body">
-                        <div id="map">
-
+                      <div class="card-body" style="padding: 0px;">
+                        <div class= "map-container">
+                          <div id="map-info" style="padding-left:10px;"></div>
+                          <div id="map-title" class="legend-title"></div>
+                          <div style="display:flex;flex-direction: column;">
+                            <div class="legend" id="map-legend"></div>
+                            <div id="map"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -175,7 +199,7 @@ Each goal had specific targets, and dates for achieving those targets. The 8 goa
                   <div class="col-lg-3">
                     <div class="card shadow mb-4" >
                       <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Most Recent Data</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Individual Stats</h6>
                       </div>
                       <div id="map-data" class="card-body">
                       </div>
@@ -185,7 +209,6 @@ Each goal had specific targets, and dates for achieving those targets. The 8 goa
               </div>
 
               <div class="tab-pane fade" id="graphs" role="tabpanel" aria-labelledby="profile-tab">
-                <h1 class="h3 mb-0 text-gray-800">Graphs</h1>
                 <div class="row">
                   <div class="col-lg-3">
                     <div class="card shadow mb-4">
@@ -253,6 +276,7 @@ Each goal had specific targets, and dates for achieving those targets. The 8 goa
                           </select>
                           <hr class="sidebar-divider">
                           <button id="generate_button" type="button" class="btn btn-primary">Generate</button>
+                          <button id="reset_button" type="button" class="btn btn-primary">Reset</button>
                       </div>
                     </div>
                   </div>

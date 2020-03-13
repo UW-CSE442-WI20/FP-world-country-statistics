@@ -3,21 +3,30 @@ import makeLineChart from "./line-chart.js";
 import makeBarChart from "./bar-chart.js";
 import makeRadarChart from "./radar-chart.js";
 import map from "./map.js";
+import { set } from "d3";
 const d3 = require("d3");
 const regeneratorRuntime = require("regenerator-runtime");
+const colors = ["red", "orange", "yellow", "green", "blue", "purple", "black", "brown"];
+var filteredIndicators;
+var old = false;
 
 var indicators = new Set();
 var countryNames = new Set();
 var countryToData = {};
+var goals = {}
+var data = require("./updated_data.csv");
 
-var data = require("./data.csv");
-function renderMap(){
-    map(countryToData);
+function renderMap(currData){
+    d3.select("#map").html("");
+    d3.select("#map-legend").html("");
+    map(currData);
 }
+
 
 function setTabs(){
     document.getElementById("chart-tab").addEventListener("click", function (){
         document.getElementById("graphs").className += " active show";
+        document.getElementById("goal-selector").className = "goal-selector-active";
         document.getElementById("world").classList.remove("show");
         document.getElementById("world").classList.remove("active");
         document.getElementById("tables").classList.remove("show");
@@ -26,6 +35,7 @@ function setTabs(){
     });
     document.getElementById("world-tab").addEventListener("click", function (){
         document.getElementById("world").className += " active show";
+        document.getElementById("goal-selector").className = "goal-selector-active";
         document.getElementById("graphs").classList.remove("show");
         document.getElementById("tables").classList.remove("show");
         document.getElementById("graphs").classList.remove("active");
@@ -35,13 +45,15 @@ function setTabs(){
     });
 }
 
-async function parseData() {
-    await d3.csv(data, async function(row) {
 
+async function parseData() {
+   
+    await d3.csv(data, async function(row) {
+        // process data
         let country = row["Country Name"];
         let indicator = row["Indicator Name"];
         countryNames.add(country);
-        indicators.add(indicator);
+        
         let countryObject = {};
         if (countryToData[country] !== undefined) {
             countryObject = countryToData[country];
@@ -50,24 +62,39 @@ async function parseData() {
         for(let i = 1990; i <= 2015; i++){
             indicatorObject["" + i] = row["" + i];
         }
+        let valid = Object.values(indicatorObject).filter(d => d !== "");
+        if (valid.length > 0) {
+            goals[indicator] = row["MDG Number"];
+            indicators.add(indicator);
+        }
         countryObject[indicator] = indicatorObject;
         countryToData[country] = countryObject;
-    })
+    });
 }
 
 async function fillFilters(){
     let countryFilter = document.getElementById("country-picker");
     let dataFilter = document.getElementById("data-picker");
     let yearFilter = document.getElementById("year-picker");
+    let mapDataFilter = document.getElementById("map-filter-selector");
+    let mapYearFilter = document.getElementById("map-year-selector");
+    dataFilter.innerHTML = "";
+    mapDataFilter.innerHTML = "";
+    countryFilter.innerHTML = "";
+    yearFilter.innerHTML = "";
 
     countryNames.forEach((value) => {
         countryFilter.innerHTML += "<option value='" + value + "'>" + value + "</option>";
     });
-    indicators.forEach((value) => {
+    let first = true;
+    filteredIndicators.forEach((value) => {
         dataFilter.innerHTML += "<option value='" + value + "'>" + value + "</option>";
+        mapDataFilter.innerHTML += "<option " + (first ? "select='selected'" : "") + " value='" + value + "'>" + value + "</option>";
+        first = false;
     });
     for(let i = 1990; i <= 2015; i++){
         yearFilter.innerHTML += "<option value='" + i + "'>" + i + "</option>";
+        mapYearFilter.innerHTML += "<option " + (i === 2015 ? "selected='selected'" : "") + " value='" + i + "'>" + i + "</option>";
     }
 }
 
@@ -88,8 +115,8 @@ async function generateCharts(){
     lineData.labels = barLabel;
     let radarDataSet = [];
     let  radarData = {};
-    console.log(countryToData);
     for(let i = 0; i < countryFilter.length; i++){
+        console.log(countryToData);
         var country_name = countryToData[countryFilter[i]][dataFilter][yearFilter] == '' ? countryFilter[i] + ": data not available" : countryFilter[i];
         donutData.push({color: pieChartColors[i], name: country_name, value: countryToData[countryFilter[i]][dataFilter][yearFilter]});
         let barTemp = getCountryData(countryFilter[i], dataFilter, barLabel);
@@ -144,13 +171,10 @@ function getCountryData(country, dataType, years){
 }
 
 async function enableGenerateButton(){
-    console.log("here");
     let countryFilter = $("#country-picker").val();
     let dataFilter = $("#data-picker").val();
     let yearFilter = $("#year-picker").val();
 
-    console.log(dataFilter);
-    console.log(countryFilter);
     if(countryFilter.length === 0 || dataFilter === "" || yearFilter === ""){
         document.getElementById("generate_button").classList.remove("active");
         document.getElementById("generate_button").className += " disabled";
@@ -170,17 +194,62 @@ async function initCharts(){
     generateCharts();
 }
 
+function filterData(goal) {
+    let filtered = {};
+    countryNames.forEach(country=> {
+        filtered[country] = {};
+    })
+    filteredIndicators = new Set();
+    indicators.forEach(ind => {
+        if (goals[ind].includes(goal)) {
+            filteredIndicators.add(ind);
+            countryNames.forEach(country=> {
+                filtered[country][ind] = countryToData[country][ind];
+            })
+        }
+        
+    });
+    fillFilters();
+    renderMap(filtered);
+    resetOption();
+    
+}
+
+function updateGoal(e) {
+    let goalnum = e.target.id.split("-")[1];
+    let list = document.getElementsByClassName("btn-nav checked");
+    for (let i =0; i < list.length; i++) {
+        list[i].className = "btn-nav";
+    }
+    e.target.className += " checked";
+
+   filterData(goalnum);
+}
+
+function resetOption() {
+    $("#country-picker").val([]);
+    $("#data-picker").val("");
+    $("#year-picker").val("");
+    $('.selectpicker').selectpicker('refresh');
+    enableGenerateButton();
+    generateCharts();
+}
+
 async function init() {
     document.getElementById("generate_button").addEventListener("click", generateCharts);
+    document.getElementById("reset_button").addEventListener("click", resetOption);
     document.getElementById("country-picker").addEventListener("change", enableGenerateButton);
     document.getElementById("data-picker").addEventListener("change", enableGenerateButton);
     document.getElementById("year-picker").addEventListener("change", enableGenerateButton);
+    document.getElementById("goal-selector").addEventListener("click", updateGoal);
 
     setTabs();
     await parseData();
-    renderMap();
+    await filterData("1");
     await fillFilters();
     await initCharts();
+
+    
 }
 
 init();
