@@ -59,7 +59,7 @@ path:hover {
 .legend-color {
   width: 50px;
   height: 20px;
-  box-shadow: 1px 1px rgba(0, 0, 0, 0.1); 
+  box-shadow: 1px 1px rgba(0, 0, 0, 0.1);
   margin-right: 5px;
 }
 
@@ -101,7 +101,7 @@ path:hover {
   display: flex;
   flex-direction: column;
   padding-right: 10px;
-  width: 200px;
+  width: 190px;
   box-shadow: rgba(0, 0, 0, 0.1);
 }
 
@@ -140,7 +140,7 @@ path:hover {
   position: relative;
 }
 
-.btn-nav span::after {    
+.btn-nav span::after {
   bottom: 0;
   content: "";
   display: block;
@@ -156,6 +156,3 @@ path:hover {
   width: 100%;
   left: 0;
 }
-
-
-

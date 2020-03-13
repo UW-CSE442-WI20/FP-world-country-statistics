@@ -18,10 +18,10 @@ function map(d){
   currFilter = $("#map-filter-selector").val(),
   currYear = $("#map-year-selector").val();
   legend = d3.select("#map-legend").append("div").attr("width", width/2 + "px").attr("class", "legend");
-  
+
   // render
   render("2d");
-  
+
   // initialize click functoins for buttons
   d3.select("#view-selector").selectAll("label").on("click", updateView);
   d3.select("#map-year-selector").on("change", function() {
@@ -32,7 +32,7 @@ function map(d){
     currFilter = $("#map-filter-selector").val();
     fill();
   });
-  
+
 }
 
 function updateView() {
@@ -133,7 +133,7 @@ function fill() {
     let value = data[country][currFilter];
     if (value !== undefined && value[currYear] !== "" && country !== "World") {
       filteredData[country] = Number(value[currYear]);
-    } 
+    }
   });
 
   // if valid data exists, make legend and continue
@@ -176,7 +176,7 @@ function fill() {
       return color;
     }
   })
-  
+
 }
 
 function polishNum(num) {
@@ -342,6 +342,8 @@ function displayData(country) {
     countryCode = cc.codes["Egypt"]
   } else if (country == "Moldova") {
     countryCode = cc.codes["Moldova: Republic of"];
+  } else if (country == "Tanzania") {
+    countryCode = cc.codes["Tanzania, United Republic of"];
   } else {
     countryCode = cc.codes[country];
   }
@@ -353,7 +355,7 @@ function displayData(country) {
   if (stats) {
     Object.keys(stats).forEach(key => {
       if (stats[key] && stats[key][2015]) {
-        html += "<b>" + key + " : </b>" + stats[key][2015] + "<br/>";
+        html += "<b>" + key + " : </b>" + stats[key][2015] + "<br><br/>";
       } else {
         unknown += "<t>" + key + "<br>";
       }
