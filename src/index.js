@@ -3,6 +3,7 @@ import makeLineChart from "./line-chart.js";
 import makeBarChart from "./bar-chart.js";
 import makeRadarChart from "./radar-chart.js";
 import map from "./map.js";
+import { line } from "d3";
 const d3 = require("d3");
 const regeneratorRuntime = require("regenerator-runtime");
 
@@ -88,11 +89,10 @@ async function generateCharts(){
     lineData.labels = barLabel;
     let radarDataSet = [];
     let  radarData = {};
-    radarData.labels = countryFilter;
     for(let i = 0; i < countryFilter.length; i++){
-        donutData.push({color: pieChartColors[i], name: countryFilter[i], value: countryToData[countryFilter[i]][dataFilter][yearFilter]});
+        var country_name = countryToData[countryFilter[i]][dataFilter][yearFilter] == '' ? countryFilter[i] + ": data not available" : countryFilter[i];
+        donutData.push({color: pieChartColors[i], name: country_name, value: countryToData[countryFilter[i]][dataFilter][yearFilter]});
         let barTemp = getCountryData(countryFilter[i], dataFilter, barLabel);
-
         barDataSet.push({label: countryFilter[i], backgroundColor: pieChartColors[i], data: barTemp});
 
         let lineTemp = getCountryData(countryFilter[i], dataFilter, barLabel);
@@ -166,7 +166,6 @@ async function initCharts(){
     $("#data-picker").val("Population, total");
     $("#year-picker").val("2000");
     $('.selectpicker').selectpicker('refresh');
-    generateCharts();
 }
 
 async function init() {
@@ -180,6 +179,7 @@ async function init() {
     renderMap();
     await fillFilters();
     await initCharts();
+    await generateCharts();
 }
 
 init();
