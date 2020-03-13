@@ -25,9 +25,7 @@ function renderMap(currData){
 function setTabs(){
     document.getElementById("chart-tab").addEventListener("click", function (){
         document.getElementById("graphs").className += " active show";
-        document.getElementById("goal-selector").classList.remove("goal-selector-active");
-        document.getElementById("goal-selector").className += (" goal-selector");
-        document.getElementById("goal-selector").style.display ="none";
+        document.getElementById("goal-selector").className = ("card shadow mb-4 goal-selector-active");
         document.getElementById("world").classList.remove("show");
         document.getElementById("world").classList.remove("active");
         document.getElementById("tables").classList.remove("show");
@@ -36,9 +34,7 @@ function setTabs(){
     });
     document.getElementById("world-tab").addEventListener("click", function (){
         document.getElementById("world").className += " active show";
-        document.getElementById("goal-selector").classList.remove("goal-selector");
-        document.getElementById("goal-selector").className += (" goal-selector-active");
-        document.getElementById("goal-selector").style.display = "block";
+        document.getElementById("goal-selector").className = ("card shadow mb-4 goal-selector-active");
         document.getElementById("graphs").classList.remove("show");
         document.getElementById("tables").classList.remove("show");
         document.getElementById("graphs").classList.remove("active");
@@ -191,6 +187,7 @@ function filterData(goal) {
     let filtered = {};
     countryNames.forEach(country=> {
         filtered[country] = {};
+        console.log(filtered);
     })
     filteredIndicators = new Set();
     indicators.forEach(ind => {
