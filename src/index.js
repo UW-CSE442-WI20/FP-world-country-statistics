@@ -165,12 +165,14 @@ async function resetOption() {
     $("#year-picker").val("");
     $('.selectpicker').selectpicker('refresh');
     enableGenerateButton
+    generateCharts
 }
 
 async function init() {
     document.getElementById("generate_button").addEventListener("click", generateCharts);
     document.getElementById("reset_button").addEventListener("click", resetOption);
     document.getElementById("reset_button").addEventListener("click", enableGenerateButton);
+    document.getElementById("reset_button").addEventListener("click", generateCharts);
     document.getElementById("country-picker").addEventListener("change", enableGenerateButton);
     document.getElementById("data-picker").addEventListener("change", enableGenerateButton);
     document.getElementById("year-picker").addEventListener("change", enableGenerateButton);
