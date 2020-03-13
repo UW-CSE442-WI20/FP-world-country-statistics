@@ -10,16 +10,20 @@ var currFilter, currYear;
 var focused = false;
 
 function map(d){
+  // set dimensions and class values
   data = d;
   let dim = d3.select("#map").node().getBoundingClientRect();
   width = dim.width * 0.95;
   height = width * 0.6;
-  d3.select("#view-selector").selectAll("label").on("click", updateView);
   currFilter = $("#map-filter-selector").val(),
   currYear = $("#map-year-selector").val();
-
   legend = d3.select("#map-legend").append("div").attr("width", width/2 + "px").attr("class", "legend");
+  
+  // render
   render("2d");
+  
+  // initialize click functoins for buttons
+  d3.select("#view-selector").selectAll("label").on("click", updateView);
   d3.select("#map-year-selector").on("change", function() {
     currYear = $(this);
     fill();
@@ -122,17 +126,17 @@ function render(view) {
 }
 
 function fill() {
-  console.log("here");
   var filteredData = {};
   var colorScale;
+  // find non empty data values
   Object.keys(data).forEach(country => {
     let value = data[country][currFilter];
     if (value !== undefined && value[currYear] !== "" && country !== "World") {
       filteredData[country] = Number(value[currYear]);
-    } else {
-      console.log(country, currFilter, currYear);
-    }
+    } 
   });
+
+  // if valid data exists, make legend and continue
   let dataCount = Object.keys(filteredData).length;
   if (dataCount > 0) {
     d3.select("#map-info").html("Data available for " + dataCount + " countries.");
@@ -159,6 +163,7 @@ function fill() {
       }
     });
   } else {
+    // else erase legend and titles
       d3.select("#map-info").html("Data is unavailable for selected year and statistic.");
       d3.select("#map-title").html("");
       d3.select("#map-legend").html("");
@@ -185,18 +190,20 @@ function polishNum(num) {
 }
 
 function generateLegend(data, scale) {
+  // find buckets from color scale
   let rangeToColor = {};
   data.forEach(d => {
     let r = scale.invertExtent(scale(d));
     rangeToColor[r] = scale(d) }
   );
+
+  // sort buckets
   let options = Object.keys(rangeToColor).sort((a,b) => {
-    console.log(a, b);
     let res = Number(a.split(",")[0]) < Number(b.split(",")[0]);
-    console.log(res);
     return res ? -1 : 1;
   });
-  console.log(options);
+
+  // construct legend
   let s = "<div class='legend-items'>";
   options.forEach(d => {
     let r = d.split(",");

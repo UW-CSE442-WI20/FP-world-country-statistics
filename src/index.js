@@ -1,14 +1,13 @@
 import makeDonut from "./pie-chart.js";
 import makeLineChart from "./line-chart.js";
 import makeBarChart from "./bar-chart.js";
-import makeRadarChart from "./radar-chart.js";
 import map from "./map.js";
-import { set } from "d3";
+import { line } from "d3";
 const d3 = require("d3");
 const regeneratorRuntime = require("regenerator-runtime");
 const colors = ["red", "orange", "yellow", "green", "blue", "purple", "black", "brown"];
 var filteredIndicators;
-var old = false;
+var currGoal = "1";
 
 var indicators = new Set();
 var countryNames = new Set();
@@ -17,6 +16,7 @@ var goals = {}
 var data = require("./updated_data.csv");
 
 function renderMap(currData){
+    console.log("here");
     d3.select("#map").html("");
     d3.select("#map-legend").html("");
     map(currData);
@@ -42,6 +42,7 @@ function setTabs(){
         document.getElementById("tables").classList.remove("active");
         document.getElementById("home").classList.remove("active");
         document.getElementById("home").classList.remove("show");
+        filterData(currGoal);
     });
 }
 
@@ -113,42 +114,32 @@ async function generateCharts(){
     let lineDataSet = [];
     let  lineData = {};
     lineData.labels = barLabel;
-    let radarDataSet = [];
-    let  radarData = {};
     for(let i = 0; i < countryFilter.length; i++){
         console.log(countryToData);
         var country_name = countryToData[countryFilter[i]][dataFilter][yearFilter] == '' ? countryFilter[i] + ": data not available" : countryFilter[i];
         donutData.push({color: pieChartColors[i], name: country_name, value: countryToData[countryFilter[i]][dataFilter][yearFilter]});
         let barTemp = getCountryData(countryFilter[i], dataFilter, barLabel);
-
         barDataSet.push({label: countryFilter[i], backgroundColor: pieChartColors[i], data: barTemp});
 
         let lineTemp = getCountryData(countryFilter[i], dataFilter, barLabel);
         lineDataSet.push({label: countryFilter[i], backgroundColor:secondaryChartColors[i] ,borderColor: pieChartColors[i], data: lineTemp, lineTension: 0.3, pointRadius: 3,
             pointBorderWidth: 2});
-
-
     }
 
     for(let i = 0; i < barLabel.length; i++){
         let year = barLabel[i];
-        let tempRadar = {label: year, backgroundColor:secondaryChartColors[i] ,
-            borderColor: pieChartColors[i],
-            fill: true};
+        
         let data =[];
         for(let j = 0; j < lineDataSet.length; j++){
             data.push(lineDataSet[j].data[i]);
         }
-        tempRadar.data = data;
-        radarDataSet.push(tempRadar);
+
     }
     barData.datasets = barDataSet;
     lineData.datasets = lineDataSet;
-    radarData.datasets = radarDataSet;
     makeDonut(donutData);
     makeBarChart(barData);
     makeLineChart(lineData);
-    makeRadarChart(radarData);
 
 }
 
@@ -191,7 +182,6 @@ async function initCharts(){
     $("#data-picker").val("Population, total");
     $("#year-picker").val("2000");
     $('.selectpicker').selectpicker('refresh');
-    generateCharts();
 }
 
 function filterData(goal) {
@@ -224,6 +214,7 @@ function updateGoal(e) {
     e.target.className += " checked";
 
    filterData(goalnum);
+   currGoal = goalnum;
 }
 
 function resetOption() {
@@ -245,11 +236,10 @@ async function init() {
 
     setTabs();
     await parseData();
-    await filterData("1");
+    await filterData(currGoal);
     await fillFilters();
     await initCharts();
 
-    
 }
 
 init();
