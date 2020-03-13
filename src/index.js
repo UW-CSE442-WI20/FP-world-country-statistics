@@ -159,8 +159,18 @@ async function initCharts(){
     $('.selectpicker').selectpicker('refresh');
 }
 
+async function resetOption() {
+    $("#country-picker").val([]);
+    $("#data-picker").val("Population, total");
+    $("#year-picker").val("2000");
+    $('.selectpicker').selectpicker('refresh');
+    enableGenerateButton
+}
+
 async function init() {
     document.getElementById("generate_button").addEventListener("click", generateCharts);
+    document.getElementById("reset_button").addEventListener("click", resetOption);
+    document.getElementById("reset_button").addEventListener("click", enableGenerateButton);
     document.getElementById("country-picker").addEventListener("change", enableGenerateButton);
     document.getElementById("data-picker").addEventListener("change", enableGenerateButton);
     document.getElementById("year-picker").addEventListener("change", enableGenerateButton);
