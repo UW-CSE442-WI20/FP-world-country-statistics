@@ -161,8 +161,8 @@ async function initCharts(){
 
 async function resetOption() {
     $("#country-picker").val([]);
-    $("#data-picker").val("Population, total");
-    $("#year-picker").val("2000");
+    $("#data-picker").val("");
+    $("#year-picker").val("");
     $('.selectpicker').selectpicker('refresh');
     enableGenerateButton
 }
