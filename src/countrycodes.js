@@ -361,7 +361,7 @@ export var codes = {
   ,
   'Russian Federation': 'RU'
   ,
-  'RWANDA': 'RW'
+  'Rwanda': 'RW'
   ,
   'Saint Helena': 'SH'
   ,

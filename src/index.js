@@ -16,7 +16,6 @@ var goals = {}
 var data = require("./updated_data.csv");
 
 function renderMap(currData){
-    console.log("here");
     d3.select("#map").html("");
     d3.select("#map-legend").html("");
     map(currData);
@@ -26,7 +25,9 @@ function renderMap(currData){
 function setTabs(){
     document.getElementById("chart-tab").addEventListener("click", function (){
         document.getElementById("graphs").className += " active show";
-        document.getElementById("goal-selector").className = "goal-selector-active";
+        document.getElementById("goal-selector").classList.remove("goal-selector-active");
+        document.getElementById("goal-selector").className += (" goal-selector");
+        document.getElementById("goal-selector").style.display ="none";
         document.getElementById("world").classList.remove("show");
         document.getElementById("world").classList.remove("active");
         document.getElementById("tables").classList.remove("show");
@@ -35,7 +36,9 @@ function setTabs(){
     });
     document.getElementById("world-tab").addEventListener("click", function (){
         document.getElementById("world").className += " active show";
-        document.getElementById("goal-selector").className = "goal-selector-active";
+        document.getElementById("goal-selector").classList.remove("goal-selector");
+        document.getElementById("goal-selector").className += (" goal-selector-active");
+        document.getElementById("goal-selector").style.display = "block";
         document.getElementById("graphs").classList.remove("show");
         document.getElementById("tables").classList.remove("show");
         document.getElementById("graphs").classList.remove("active");
@@ -48,13 +51,13 @@ function setTabs(){
 
 
 async function parseData() {
-   
+
     await d3.csv(data, async function(row) {
         // process data
         let country = row["Country Name"];
         let indicator = row["Indicator Name"];
         countryNames.add(country);
-        
+
         let countryObject = {};
         if (countryToData[country] !== undefined) {
             countryObject = countryToData[country];
@@ -128,7 +131,7 @@ async function generateCharts(){
 
     for(let i = 0; i < barLabel.length; i++){
         let year = barLabel[i];
-        
+
         let data =[];
         for(let j = 0; j < lineDataSet.length; j++){
             data.push(lineDataSet[j].data[i]);
@@ -197,12 +200,12 @@ function filterData(goal) {
                 filtered[country][ind] = countryToData[country][ind];
             })
         }
-        
+
     });
     fillFilters();
     renderMap(filtered);
     resetOption();
-    
+
 }
 
 function updateGoal(e) {
