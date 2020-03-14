@@ -13,9 +13,8 @@ var indicators = new Set();
 var countryNames = new Set();
 var countryToData = {};
 var goals = {}
-var data = require("./updated_data.csv");
-var chartdata = require("./updated_data.csv");
-var filled = true
+var data = require("./joined_data.csv");
+var chartdata = require("./data.csv");
 
 function renderMap(currData){
     d3.select("#map").html("");
