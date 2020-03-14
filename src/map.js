@@ -27,16 +27,17 @@ function map(d){
   d3.select("#view-selector").selectAll("label").on("click", updateView);
   d3.select("#map-year-selector").on("change", function() {
     currYear = $("#map-year-selector").val();
+    console.log($("#map-year-selector").val());
     clearData();
     // if (currcountry != "") {
     //   console.log($("country"));
     // displayData();
     // }
-    fill();
+    fill(true);
   });
   d3.select("#map-filter-selector").on("change", function() {
     currFilter = $("#map-filter-selector").val();
-    fill();
+    fill(true);
   });
 
 }
@@ -119,22 +120,25 @@ function render(view) {
   svg.call(d3.drag()
         .on("start", dragstarted)
         .on("drag", dragged)); */
-  fill();
+  fill(false);
 }
 
-function fill() {
+function fill(notInit) {
   var filteredData = {};
   var colorScale;
   // find non empty data values
+  console.log(currYear + currFilter)
   Object.keys(data).forEach(country => {
     let value = data[country][currFilter];
     if (value !== undefined && value[currYear] !== "" && country !== "World") {
+      console.log("match")
       filteredData[country] = Number(value[currYear]);
     }
   });
 
   // if valid data exists, make legend and continue
   let dataCount = Object.keys(filteredData).length;
+  console.log(dataCount)
   if (dataCount > 0) {
     d3.select("#map-info").html("Data available for " + dataCount + " countries.");
     d3.select("#map-title").html(currFilter + " in " + currYear);
@@ -151,7 +155,10 @@ function fill() {
     colorScale = d3.scaleQuantize()
                       .domain([0, maxValue])
                       .range(d3.schemeYlGnBu[Math.min(5, domain.length)]);
-                      legend.html(generateLegend(domain, colorScale));
+    legend.html(generateLegend(domain, colorScale));
+    if (notInit) {
+          legend.html(generateLegend(domain, colorScale));
+    }
     d3.selectAll("path").style("fill", function(d) {
       let country = d.properties.name;
       if (filteredData[country] !== undefined) {
@@ -163,7 +170,7 @@ function fill() {
     // else erase legend and titles
       d3.select("#map-info").html("Data is unavailable for selected year and statistic.");
       d3.select("#map-title").html("");
-      d3.select("#map-legend").html("");
+      legend.html("");
   }
 
   d3.selectAll("path").style("fill", function(d) {
@@ -188,6 +195,7 @@ function polishNum(num) {
 
 function generateLegend(data, scale) {
   // find buckets from color scale
+  console.log("generating")
   let rangeToColor = {};
   data.forEach(d => {
     let r = scale.invertExtent(scale(d));
