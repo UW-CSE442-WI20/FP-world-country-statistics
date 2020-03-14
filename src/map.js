@@ -148,7 +148,13 @@ function fill(notInit) {
     console.log(maxValue);
     for (let i = 0; i < 8; i++) {
       if (maxValue <= Math.pow(10, i)) {
-        maxValue = Math.pow(10, i);
+        console.log(Math.pow(10, i));
+        if (Math.pow(10, i) > 100) {
+           maxValue = Math.round(maxValue / 10) * 10;
+        } else {
+          maxValue = Math.pow(10, i);
+        }
+        //maxValue = Math.pow(10, i);
         break;
       }
     }
@@ -185,11 +191,11 @@ function fill(notInit) {
 
 function polishNum(num) {
   if (num > 100000) {
-    return (num/100000) + "m";
+    return Math.round((num/100000 / 10) * 10) + "m";
   } else if (num > 1000) {
-    return (num/1000) + "k";
+    return Math.round((num/1000 / 10) * 10) + "k";
   } else {
-    return num;
+    return Math.round((num / 10) * 10);
   }
 }
 
