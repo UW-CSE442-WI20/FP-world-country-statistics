@@ -17,8 +17,8 @@
 
 
   <!-- Custom styles for this template-->
-  <link href="https://uw-cse442-wi20.github.io/FP-world-country-statistics/sb-admin-2.min.d486dcb4.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://uw-cse442-wi20.github.io/FP-world-country-statistics/styles.4a04c8e1.css">
+  <link href="https://uw-cse442-wi20.github.io/FP-world-country-statistics/sb-admin-2.min.1119d3da.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://uw-cse442-wi20.github.io/FP-world-country-statistics/styles.de804d28.css">
   <script src="https://d3js.org/topojson.v3.min.js"></script>
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -36,81 +36,151 @@
   <script src="https://unpkg.com/versor"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/1.13.0/d3-legend.min.js"></script>
+
 </head>
 
-<body id="page-top">
+<body id="page-top" style="width: 100vw; overflow-x:hidden;">
 
   <!-- Page Wrapper -->
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
+    <nav class="navbar navbar-dark bg-primary">
+      <ul class="navbar-nav" id="main-menu">
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="https://uw-cse442-wi20.github.io/FP-world-country-statistics/index.html">
-        <div class="sidebar-brand-icon">
+      <a class="navbar-brand" href="https://uw-cse442-wi20.github.io/FP-world-country-statistics/index.html">
+        <div class="navbar-brand-icon">
           <i class="fas fa-home"></i>
-        </div>
-        <div class="sidebar-brand-text mx-3">World Statistics</div>
+        World Statistics</div>
       </a>
 
-      <!-- Divider -->
-      <hr class="sidebar-divider my-0">
-
-      <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
-        <a class="nav-link" href="https://uw-cse442-wi20.github.io/FP-world-country-statistics/index.html">
-          <i class="fas fa-fw fa-search"></i>
-          <span>Dashboard</span></a>
-      </li>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider">
-
       <li class="nav-item">
-        <a class="nav-link" id="world-tab" data-toggle="tab" href="#world" role="tab" aria-controls="contact" aria-selected="true">
+        <a class="nav-link" id="world-tab" data-toggle="tab" href="#world" role="tab" aria-selected="true">
           <i class="fas fa-fw fa-globe" aria-hidden="true"></i><span>World View</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="3d-world-tab" data-toggle="tab" href="#3dworld" role="tab" aria-controls="contact" aria-selected="false">
-          <i class="fas fa-fw fa-globe" aria-hidden="true"></i><span>3D World View</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" id="chart-tab" data-toggle="tab" href="#graphs" role="tab" aria-controls="contact" aria-selected="false">
           <i class="fas fa-fw fa-chart-area">
           </i><span>Charts</span></a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" id="table-tab" data-toggle="tab" href="#tables" role="tab" aria-controls="contact" aria-selected="false">
-          <i class="fas fa-fw fa-table">
-          </i><span>Tables</span></a>
-      </li>
-
-
     </ul>
+    </nav>
     <!-- End of Sidebar -->
+    </div>
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
-
       <!-- Main Content -->
       <div id="content">
         <!-- End of Topbar -->
 
         <!-- Begin Page Content -->
 
-        <div class="container-fluid" style="padding-top: 50px;">
+        <div class="container-fluid" style="padding:5px;">
+          <div class="card shadow mb-4 goal-selector" id="goal-selector" style="padding-left:10px;padding-top:10px;margin-right:10px;">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Millenium Development Goals</h6>
+            </div>
+            <div class="card-body">
+              <button class="btn-nav checked" id="goal-1">
+                <i class="fas fa-fw fa-coins"></i><span>Poverty and Hunger</span></button>
+              <button class="btn-nav" id="goal-2">
+                <i class="fas fa-fw fa-graduation-cap"></i><span>Education</span></button>
+              <button class="btn-nav" id="goal-3">
+                <i class="fas fa-fw fa-venus-mars" aria-hidden="true"></i><span>Gender Equality</span></button>
+              <button class="btn-nav" id="goal-4">
+                <i class="fas fa-fw fa-skull-crossbones">
+                </i><span>Child Mortality</span></button>
+              <button class="btn-nav" id="goal-5">
+                <i class="fas fa-fw fa-heartbeat">
+                </i><span>Maternal Health</span></button>
 
+              <button class="btn-nav" id="goal-6">
+                <i class="fas fa-fw fa-medkit">
+                </i><span>Disease Prevention</span></button>
 
-          <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="world" role="tabpanel" aria-labelledby="home-tab">
-              <h1 class="h3 mb-0 text-gray-800">World View</h1>
+              <button class="btn-nav" id="goal-7">
+                <i class="fas fa-fw fa-leaf">
+                </i><span>Envrionment</span></button>
+              <button class="btn-nav" id="goal-8">
+                <i class="fas fa-fw fa-hands-helping">
+                </i><span>Global Partnerships</span></button>
+              <button class="btn-nav" id="reset">
+                <i class="fas fa-fw fa-hands-helping">
+                </i><span>reset</span></button>
+            </div>
+          </div>
+          
+          <div class="tab-content" id="myTabContent" style="width:97%; height:100%; margin:0 auto;">
+            <div class="banner"></div>
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+              <div class="row">
+                <div style="margin: 30px;">
+                  <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                      <h6 class="m-0 font-weight-bold text-primary">Overview</h6>
+                    </div>
+                    <div class="card-body">
+                      <p style="font-size: 1.5em !important">
+                        Project looks at statistics on the general development of countries around the world based on data provided by the World Bank. In general, this project examines
+                        the Millennium Development Goals (MDGs) for the year 2015 and the current Sustainable Development Goals (SDGs) for the year 2030.
+                      <br>
+                      <br>
+
+                      Team members: Samuel Oh, Andrew Siew, Rebecca Bol, Famus Xie, Kevin Jeong
+                      <br>
+                      <br>
+
+                          The Millennium Development Goals (MDGs) were eight international development goals for the year 2015 that had been established following the Millennium Summit of the United Nations in 2000, following the adoption of the United Nations Millennium Declaration. The Sustainable Development Goals (SDGs) replaced the MDGs in 2016.
+
+All 191 United Nations member states, and at least 22 international organizations, committed to help achieve the following Millennium Development Goals by 2015:
+
+<br>
+
+<b>
+<br>1) To eradicate extreme poverty and hunger
+<br>2) To achieve universal primary education
+<br>3) To promote gender equality and empower women
+<br>4) To reduce child mortality
+<br>5) To improve maternal health
+<br>6) To combat HIV/AIDS, malaria, and other diseases
+<br>7) To ensure environmental sustainability
+<br>8) To develop a global partnership for development
+</b>
+<br>
+<br>
+The Millennium Development Goals are a UN initiative.
+Each goal had specific targets, and dates for achieving those targets. The 8 goals were measured by 21 targets. To accelerate progress, the G8 finance ministers agreed in June 2005 to provide enough funds to the World Bank, the International Monetary Fund (IMF) and the African Development Bank (AfDB) to cancel $40 to $55 billion in debt owed by members of the heavily indebted poor countries (HIPC) to allow them to redirect resources to programs for improving health and education and for alleviating poverty.
+
+<br>
+<br>
+In the world view you will see a map and you can select one of the development goals to view. Selecting a data set to view will create a heat map on the data set.
+Countries without that data will show as grey on the map.
+
+<br>
+<br>
+There will be 3 charts you can look at to observe general trends and compare between countries.
+The pie charts will show comparison of statisitics between countries for the given year you chose.
+The line and bar graphs show the comparison of statisitics overtime from the year you chose to 5 years later.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane fade active" id="world" role="tabpanel" aria-labelledby="map-tab">
                 <div class="row">
-                  <div class="col-xl-9">
+                  <div class="col-lg-8">
                     <div class="card shadow mb-4">
                       <div class="card-header py-3">
                         <div class="map-header">
                           <h6 class="m-0 font-weight-bold text-primary">World Map</h6>
+                          <div class="space"></div>
+                          <select class="selectpicker show-tick" data-width="10%" data-live-search="true" id="map-year-selector"></select>
+                          <select class="selectpicker show-tick" data-width="30%" data-live-search="true" id="map-filter-selector"></select>
+
                           <div class="map-view-select">
                             <i class="fas fa-fw fa-eye" style="margin-right:10px;" ,="" aria-hidden="true"></i>
                             <div id="view-selector" class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -124,17 +194,22 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card-body">
-                        <div id="map">
-
+                      <div class="card-body" style="padding: 0px;">
+                        <div class="map-container">
+                          <div id="map-info" style="padding-left:10px;"></div>
+                          <div id="map-title" class="legend-title"></div>
+                          <div style="display:flex;flex-direction: column;">
+                            <div class="legend" id="map-legend"></div>
+                            <div id="map"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="col-lg-3">
+                  <div class="col-lg-4">
                     <div class="card shadow mb-4">
                       <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Most Recent Data</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Individual Stats</h6>
                       </div>
                       <div id="map-data" class="card-body">
                       </div>
@@ -142,36 +217,9 @@
                   </div>
                 </div>
               </div>
+
               <div class="tab-pane fade" id="graphs" role="tabpanel" aria-labelledby="profile-tab">
-                <h1 class="h3 mb-0 text-gray-800">Graphs</h1>
                 <div class="row">
-                  <div class="col-lg-3">
-                    <div class="card shadow mb-4">
-                      <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Pie Chart</h6>
-                      </div>
-                      <div class="card-body" id="pie-container" style="height: 400px;">
-                        <canvas id="pie">
-
-                        </canvas>
-                        
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-6">
-                    <div class="card shadow mb-4">
-                      <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Bar Chart</h6>
-                      </div>
-                      <div class="card-body" style="height: 400px;" id="bar-container">
-                        <canvas id="bar">
-
-                        </canvas>
-                        
-                      </div>
-                    </div>
-                  </div>
-
                   <div class="col-lg-3">
                     <div class="card shadow mb-4">
                       <div class="card-header py-3">
@@ -211,13 +259,41 @@
                           </select>
                           <hr class="sidebar-divider">
                           <button id="generate_button" type="button" class="btn btn-primary">Generate</button>
+                          <button id="reset_button" type="button" class="btn btn-primary">Reset</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3">
+                    <div class="card shadow mb-4">
+                      <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Pie Chart </h6>
+                      </div>
+                      <div class="card-body" id="pie-container" style="height: 400px;">
+                        <canvas id="pie">
+
+                        </canvas>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="card shadow mb-4">
+                      <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Bar Chart</h6>
+                      </div>
+                      <div class="card-body" style="height: 400px;" id="bar-container">
+                        <canvas id="bar">
+
+                        </canvas>
+
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <div class="row">
-                  <div class="col-lg-8">
+                  <div class="col-lg-12">
                     <div class="card shadow mb-4">
                       <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Line Graph</h6>
@@ -226,20 +302,7 @@
                         <canvas id="line">
 
                         </canvas>
-                        
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-4">
-                    <div class="card shadow mb-4">
-                      <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Radar Chart</h6>
-                      </div>
-                      <div class="card-body" style="height: 400px" id="radar-container">
-                        <canvas id="radar">
 
-                        </canvas>
-                        
                       </div>
                     </div>
                   </div>
@@ -251,11 +314,11 @@
 
               </div>
 
-              <!-- 3D world Map Session -->
+              <!-- 3D world Map Session
               <div class="tab-pane fade" id="3d-world" role="tabpanel" aria-labelledby="contact-tab">
                 <div class="row">
-                  <div class="col-xl-9">
-                    <div class="card shadow mb-4">
+                  <div class="col-xl-9" >
+                    <div class="card shadow mb-4" >
                       <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">World Map</h6>
                       </div>
@@ -263,19 +326,19 @@
                         <span id="map3d-header"></span>
                         <canvas id="globe"></canvas>
                         <div>
-                          <input type="range" min="0" max="360" value="0" id="mapRange">
+                          <input type="range" min="0" max="360" value = "0" id="mapRange">
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="col-lg-3">
-                    <div class="card shadow mb-4">
-                      <div id="menu">
+                    <div class="card shadow mb-4" >
+                      <div id ="menu">
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -283,17 +346,17 @@
       </div>
       <!-- End of Main Content -->
 
-    </div>
+    
     <!-- End of Content Wrapper -->
 
   
   <!-- End of Page Wrapper -->
 
   <!-- Page level custom scripts -->
-  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/pie-chart.a4ca2097.js"></script>
-  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/src.dfdc2374.js"></script>
-  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/map.d92c2e67.js"></script>
-  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/3dmap.2bdcd2e9.js"></script>
+  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/pie-chart.8cf7dfec.js"></script>
+  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/src.559a8fb1.js"></script>
+  <script src="https://uw-cse442-wi20.github.io/FP-world-country-statistics/map.1ea6e056.js"></script>
+  <!-- <script src="./3dmap.js"></script> -->
 </body>
 
 </html>
