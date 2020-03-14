@@ -14,6 +14,8 @@ var countryNames = new Set();
 var countryToData = {};
 var goals = {}
 var data = require("./updated_data.csv");
+var chartdata = require("./updated_data.csv");
+var filled = true
 
 function renderMap(currData){
     d3.select("#map").html("");
@@ -72,6 +74,32 @@ async function parseData() {
     });
 }
 
+async function parseChartData() {
+
+    await d3.csv(chartdata, async function(row) {
+        // process data
+        let country = row["Country Name"];
+        let indicator = row["Indicator Name"];
+        countryNames.add(country);
+
+        let countryObject = {};
+        if (countryToData[country] !== undefined) {
+            countryObject = countryToData[country];
+        }
+        let indicatorObject = {};
+        for(let i = 1990; i <= 2015; i++){
+            indicatorObject["" + i] = row["" + i];
+        }
+        let valid = Object.values(indicatorObject).filter(d => d !== "");
+        if (valid.length > 0) {
+            goals[indicator] = row["MDG Number"];
+            indicators.add(indicator);
+        }
+        countryObject[indicator] = indicatorObject;
+        countryToData[country] = countryObject;
+    });
+}
+
 async function fillFilters(){
     let countryFilter = document.getElementById("country-picker");
     let dataFilter = document.getElementById("data-picker");
@@ -92,10 +120,14 @@ async function fillFilters(){
         mapDataFilter.innerHTML += "<option " + (first ? "select='selected'" : "") + " value='" + value + "'>" + value + "</option>";
         first = false;
     });
+    if (filled) {
     for(let i = 1990; i <= 2015; i++){
         yearFilter.innerHTML += "<option value='" + i + "'>" + i + "</option>";
         mapYearFilter.innerHTML += "<option " + (i === 2015 ? "selected='selected'" : "") + " value='" + i + "'>" + i + "</option>";
     }
+    filled = false
+
+}
 }
 
 async function generateCharts(){
