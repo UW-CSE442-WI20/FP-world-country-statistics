@@ -100,12 +100,13 @@ async function parseChartData() {
     });
 }
 
-async function fillFilters(){
+async function fillFilters(initiation){
     let countryFilter = document.getElementById("country-picker");
     let dataFilter = document.getElementById("data-picker");
     let yearFilter = document.getElementById("year-picker");
     let mapDataFilter = document.getElementById("map-filter-selector");
     let mapYearFilter = document.getElementById("map-year-selector");
+    let chartYearFilter = document.getElementById("year-picker");
     dataFilter.innerHTML = "";
     mapDataFilter.innerHTML = "";
     countryFilter.innerHTML = "";
@@ -120,15 +121,18 @@ async function fillFilters(){
         mapDataFilter.innerHTML += "<option " + (first ? "select='selected'" : "") + " value='" + value + "'>" + value + "</option>";
         first = false;
     });
-    if (filled) {
+    if (initiation) {
     for(let i = 1990; i <= 2015; i++){
         yearFilter.innerHTML += "<option value='" + i + "'>" + i + "</option>";
         mapYearFilter.innerHTML += "<option " + (i === 2015 ? "selected='selected'" : "") + " value='" + i + "'>" + i + "</option>";
     }
-    filled = false
+}
+for(let i = 1990; i <= 2015; i++){
+    yearFilter.innerHTML += "<option value='" + i + "'>" + i + "</option>";
+}
+}
 
-}
-}
+
 
 async function generateCharts(){
     let pieChartColors = ['#4e73df', '#f6c23e', '#36b9cc', '#1cc88a', '#6f42c1', '#5a5c69'];
@@ -231,7 +235,7 @@ function filterData(goal) {
         }
 
     });
-    fillFilters();
+    fillFilters(false);
     renderMap(filtered);
     resetOption();
 
@@ -269,7 +273,7 @@ async function init() {
     setTabs();
     await parseData();
     await filterData(currGoal);
-    await fillFilters();
+    await fillFilters(true)
     await initCharts();
 
 }
