@@ -33,7 +33,7 @@ path:hover {
 
 
 .legend {
-  height: 50px;
+  height: 57px;
   display: flex;
   justify-content: center;
 }
@@ -57,10 +57,10 @@ path:hover {
 }
 
 .legend-color {
-  width: 50px;
+  width: 70px;
   height: 20px;
   box-shadow: 1px 1px rgba(0, 0, 0, 0.1);
-  margin-right: 5px;
+  margin-right: 7px;
 }
 
 .space {
