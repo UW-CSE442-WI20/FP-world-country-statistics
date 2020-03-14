@@ -145,9 +145,9 @@ function fill(notInit) {
 
     let domain = Object.values(filteredData);
     let maxValue = d3.extent(domain)[1];
-
+    console.log(maxValue);
     for (let i = 0; i < 8; i++) {
-      if (maxValue < Math.pow(10, i)) {
+      if (maxValue <= Math.pow(10, i)) {
         maxValue = Math.pow(10, i);
         break;
       }
@@ -355,7 +355,6 @@ function displayData(country) {
   }
 
   let stats = data[country];
-  console.log(stats);
   let unknown = "<br>Unknown stats:<br>";
   let html = "<div class='map-data-header'><h3 style='margin-top:16px'>" + country + "</h3><img src='https://www.countryflags.io/" + countryCode + "/flat/64.png' padding=0px></div>";
   if (stats) {
