@@ -10,7 +10,8 @@ var currFilter, currYear;
 var currcountry;
 var focused = false;
 
-function map(d){
+// with default view = "2d"
+function map(d, view = "2d"){
   // set dimensions and class values
   data = d;
   let dim = d3.select("#map").node().getBoundingClientRect();
@@ -21,7 +22,7 @@ function map(d){
   legend = d3.select("#map-legend").append("div").attr("width", width/2 + "px").attr("class", "legend");
 
   // render
-  render("2d");
+  render(view);
 
   // initialize click functoins for buttons
   d3.select("#view-selector").selectAll("label").on("click", updateView);
@@ -127,7 +128,6 @@ function fill(notInit) {
   var filteredData = {};
   var colorScale;
   // find non empty data values
-  console.log(currYear + currFilter)
   Object.keys(data).forEach(country => {
     let value = data[country][currFilter];
     if (value !== undefined && value[currYear] !== "" && country !== "World") {
@@ -138,17 +138,14 @@ function fill(notInit) {
 
   // if valid data exists, make legend and continue
   let dataCount = Object.keys(filteredData).length;
-  console.log(dataCount)
   if (dataCount > 0) {
     d3.select("#map-info").html("Data available for " + dataCount + " countries.");
     d3.select("#map-title").html(currFilter + " in " + currYear);
 
     let domain = Object.values(filteredData);
     let maxValue = d3.extent(domain)[1];
-    console.log(maxValue);
     for (let i = 0; i < 8; i++) {
       if (maxValue <= Math.pow(10, i)) {
-        console.log(Math.pow(10, i));
         if (Math.pow(10, i) > 100) {
            maxValue = Math.round(maxValue / 10) * 10;
         } else {
@@ -191,9 +188,9 @@ function fill(notInit) {
 
 function polishNum(num) {
   if (num > 100000) {
-    return Math.round((num/100000 / 10) * 10) + "m";
+    return Math.round((num / 100000 / 100 * 100)) + "m";
   } else if (num > 1000) {
-    return Math.round((num/1000 / 10) * 10) + "k";
+    return Math.round(num / 1000 * 100) / 100 + "k";
   } else {
     return Math.round((num / 10) * 10);
   }
@@ -382,21 +379,5 @@ function displayData(country) {
 function stopped() {
   if (d3.event.defaultPrevented) d3.event.stopPropagation();
 }
-
-/*
-function dragstarted() {
-  v0 = versor.cartesian(proj.invert(d3.mouse(this)));
-  r0 = proj.rotate();
-  q0 = versor(r0);
-}
-
-function dragged() {
-  var v1 = versor.cartesian(proj.rotate(r0).invert(d3.mouse(this))),
-      q1 = versor.multiply(q0, versor.delta(v0, v1)),
-      r1 = versor.rotation(q1);
-  proj.rotate(r1);
-  svg.selectAll(".countries path").attr("d", path);
-} */
-
 
 export default map;

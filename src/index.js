@@ -2,6 +2,7 @@ import makeDonut from "./pie-chart.js";
 import makeLineChart from "./line-chart.js";
 import makeBarChart from "./bar-chart.js";
 import map from "./map.js";
+import updateView from "./map.js";
 import { line } from "d3";
 const d3 = require("d3");
 const regeneratorRuntime = require("regenerator-runtime");
@@ -16,15 +17,18 @@ var goals = {}
 var data = require("./joined_data.csv");
 var chartdata = require("./data.csv");
 var filled = true;
+var currentView;
 
-function renderMap(currData){
+function renderMap(currData, view = "2d"){
     d3.select("#map").html("");
     d3.select("#map-legend").html("");
-    map(currData);
+    map(currData, currentView);
 }
 
 
 function setTabs(){
+
+
     document.getElementById("chart-tab").addEventListener("click", function (){
         document.getElementById("graphs").className += " active show";
         document.getElementById("goal-selector").className = ("card shadow mb-4 goal-selector-active");
@@ -234,7 +238,7 @@ function filterData(goal) {
 
     });
     fillFilters(false);
-    renderMap(filtered);
+    renderMap(filtered, currentView);
     resetOption();
 
 }
@@ -261,6 +265,14 @@ function resetOption() {
 }
 
 async function init() {
+    document.getElementById("2d").addEventListener("click", function() {
+      console.log("HEREEEEEEEEEEEEEEEEEEEEEEE");
+      currentView = "2d";
+    });
+    document.getElementById("3d").addEventListener("click", function() {
+      console.log("HEREEEEEEEEEEEEEEEEEEEEEEE");
+      currentView = "3d";
+    });
     document.getElementById("generate_button").addEventListener("click", generateCharts);
     document.getElementById("reset_button").addEventListener("click", resetOption);
     document.getElementById("country-picker").addEventListener("change", enableGenerateButton);
