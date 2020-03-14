@@ -150,7 +150,6 @@ async function generateCharts(){
     let  lineData = {};
     lineData.labels = barLabel;
     for(let i = 0; i < countryFilter.length; i++){
-        console.log(countryToData);
         var country_name = countryToData[countryFilter[i]][dataFilter][yearFilter] == '' ? countryFilter[i] + ": data not available" : countryFilter[i];
         donutData.push({color: pieChartColors[i], name: country_name, value: countryToData[countryFilter[i]][dataFilter][yearFilter]});
         let barTemp = getCountryData(countryFilter[i], dataFilter, barLabel);
@@ -223,7 +222,6 @@ function filterData(goal) {
     let filtered = {};
     countryNames.forEach(country=> {
         filtered[country] = {};
-        console.log(filtered);
     })
     filteredIndicators = new Set();
     indicators.forEach(ind => {
