@@ -25,7 +25,7 @@ function map(d){
   // initialize click functoins for buttons
   d3.select("#view-selector").selectAll("label").on("click", updateView);
   d3.select("#map-year-selector").on("change", function() {
-    currYear = $(this);
+    currYear = $("#map-year-selector").val();
     fill();
   });
   d3.select("#map-filter-selector").on("change", function() {

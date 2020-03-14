@@ -265,6 +265,8 @@ async function init() {
     document.getElementById("data-picker").addEventListener("change", enableGenerateButton);
     document.getElementById("year-picker").addEventListener("change", enableGenerateButton);
     document.getElementById("goal-selector").addEventListener("click", updateGoal);
+    document.getElementById("map-year-selector").addEventListener("change", filterData(currGoal));
+
 
     setTabs();
     await parseData();
