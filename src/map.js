@@ -7,6 +7,7 @@ var active = d3.select(null);
 var width, height, zoom, drag, path, g, data, currentView, proj;
 var svg, legend;
 var currFilter, currYear;
+var currcountry;
 var focused = false;
 
 function map(d){
@@ -26,6 +27,11 @@ function map(d){
   d3.select("#view-selector").selectAll("label").on("click", updateView);
   d3.select("#map-year-selector").on("change", function() {
     currYear = $("#map-year-selector").val();
+    clearData();
+    // if (currcountry != "") {
+    //   console.log($("country"));
+    // displayData();
+    // }
     fill();
   });
   d3.select("#map-filter-selector").on("change", function() {
@@ -247,7 +253,7 @@ function focus(node){
       .duration(750)
       .style("stroke-width", 1.5 / scale + "px")
       .call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
-
+  // currcountry = node.properties.name;
   displayData(node.properties.name);
 }
 
@@ -260,6 +266,7 @@ function reset() {
 
   active.classed("active", false);
   active = d3.select(null);
+  currcountry = "";
 
   svg.transition()
       .duration(750)
@@ -345,8 +352,8 @@ function displayData(country) {
   let html = "<div class='map-data-header'><h3 style='margin-top:16px'>" + country + "</h3><img src='https://www.countryflags.io/" + countryCode + "/flat/64.png' padding=0px></div>";
   if (stats) {
     Object.keys(stats).forEach(key => {
-      if (stats[key] && stats[key][2015]) {
-        html += "<b>" + key + " : </b>" + stats[key][2015] + "<br><br/>";
+      if (stats[key] && stats[key][currYear]) {
+        html += "<b>" + key + " : </b>" + stats[key][currYear] + "<br><br/>";
       } else {
         unknown += "<t>" + key + "<br>";
       }
