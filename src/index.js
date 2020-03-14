@@ -15,6 +15,7 @@ var countryToData = {};
 var goals = {}
 var data = require("./joined_data.csv");
 var chartdata = require("./data.csv");
+var filled = true;
 
 function renderMap(currData){
     d3.select("#map").html("");
